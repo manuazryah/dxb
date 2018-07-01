@@ -41,15 +41,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <hr class="appoint_history" />
                 <div>
-                    <h2 style="text-align: center;color: red;">Appointment Closed</h2>
-                    <div class="clearfix"></div>
-                    <?php
-                    if (Yii::$app->session['post']['id'] == 1 || Yii::$app->session['post']['id'] == 4) {
-                        echo Html::a('Open Close Estimate', ['change-estimate-status', 'id' => $appointment->id], ['class' => 'open-appt']);
-                    }
+                    <?php if ($appointment->closeestimate_status == 0) { ?>
+                        <h2 style="text-align: center;color: red;">Close Estimate Completed</h2>
+                    <?php } else { ?>
+                        <h2 style="text-align: center;color: red;">Appointment Closed</h2>
+                    <?php }
                     ?>
+                    <div class="clearfix"></div>
                 </div>
-                 <div class="clearfix"></div>
+                <div class="clearfix"></div>
                 <hr class="appoint_history" />
                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                     <li>
@@ -257,13 +257,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             </div>
-            <?php //Pjax::end();          ?>
+            <?php //Pjax::end();           ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2  class="appoint-title panel-title">Previously Generated FDA'S  &  Uploaded Files</h2>
 
                 </div>
-                <?php //Pjax::begin();  ?>
+                <?php //Pjax::begin();   ?>
                 <div class="panel-body">
                     <div class="row">
 
@@ -286,7 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="row" style="width: 180px;display: inline-block;" title="<?= $princip_name1 ?>">
                                         <div class="upload_file_list" style="float:left;height: 55px;">
                                             <div>
-                                                <!--<span class=""><?php // echo Html::a($invoice_number, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('/appointment/close-estimate/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';       ?></span>-->
+                                                <!--<span class=""><?php // echo Html::a($invoice_number, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('/appointment/close-estimate/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';            ?></span>-->
                                                 <span class=""><?php echo Html::a($invoice_number, ['/appointment/close-estimate/show-report', 'id' => $estmate_report->id], ['target' => "_blank"]) . '&nbsp;&nbsp;'; ?></span>
                                             </div>
                                             <div style="color:#676262;">
@@ -322,7 +322,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="row" style="width: 170px;display: inline-block;" title="<?= $princip_name ?>">
                                         <div class="upload_file_list" style="float:left;height: 55px;">
                                             <div>
-                                                <!--<span class=""><?php // echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('/appointment/close-estimate/show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;';     ?></span>-->
+                                                <!--<span class=""><?php // echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('/appointment/close-estimate/show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;';          ?></span>-->
                                                 <span class=""><?php echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report', 'id' => $estmate_all_report->id], ['target' => "_blank"]) . '&nbsp;&nbsp;'; ?></span>
                                             </div>
                                             <div style="color:#676262;">

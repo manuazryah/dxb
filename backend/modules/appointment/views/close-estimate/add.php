@@ -129,6 +129,11 @@ $token = Yii::$app->request->get('token');
                     <?php
                 }
                 ?>
+                <?php
+                if ($appointment->closeestimate_status == 0) {
+                    echo Html::a('Open Close Estimate for Operations', ['change-estimate-status', 'id' => $appointment->id], ['class' => 'open-appt']);
+                }
+                ?>
                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                     <li>
                         <?php
@@ -268,7 +273,7 @@ $token = Yii::$app->request->get('token');
                                             ?>
                                                         </span>
                                                 </td>-->
-                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ?></td>-->
+                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ?></td>-->
                                             <td class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                 <?php
                                                 if ($estimate->invoice_type == '') {
@@ -344,7 +349,7 @@ $token = Yii::$app->request->get('token');
                                         <td style=""><?php echo Yii::$app->SetValues->NumberFormat($epda_sub_total) . '/-'; ?></td>
                                         <td style=""><?php echo Yii::$app->SetValues->NumberFormat($fda_sub_total) . '/-'; ?>
                                         <td></td>
-                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ?></td>-->
+                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
                                         <td colspan=""></td>
                                         <td colspan=""></td>
                                         <td colspan=""></td>
@@ -361,7 +366,7 @@ $token = Yii::$app->request->get('token');
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ?></td>-->
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
@@ -662,10 +667,10 @@ $token = Yii::$app->request->get('token');
                 <div style="float:right;padding-top: 5px;">
                     <?php
                     $post_id = Yii::$app->session['post']['id'];
-                    if($post_id == 1 || $post_id ==4){
-                        echo Html::a('<i class="fa fa-times"></i><span>Completed and Proceed to Accounts</span>', ['close-estimate/close-estimate-complete', 'id' => $appointment->id], ['class' => 'btn btn-red btn-icon btn-icon-standalone']);
-                    }else{
+                    if ($post_id == 1 || $post_id == 4) {
                         echo Html::a('<i class="fa fa-times"></i><span>Estimate Closed</span>', ['close-estimate/estimate-complete', 'id' => $appointment->id], ['class' => 'btn btn-red btn-icon btn-icon-standalone']);
+                    } else {
+                        echo Html::a('<i class="fa fa-times"></i><span>Completed and Proceed to Accounts</span>', ['close-estimate/close-estimate-complete', 'id' => $appointment->id], ['class' => 'btn btn-red btn-icon btn-icon-standalone']);
                     }
                     ?>
 
@@ -714,6 +719,14 @@ $token = Yii::$app->request->get('token');
         /*        .edit-input {
                     display:none;
                 }*/
+        .open-appt {
+            float: right;
+            color: #305da8;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
     </style>
     <script>
                         $("document").ready(function () {

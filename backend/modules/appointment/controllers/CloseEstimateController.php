@@ -151,6 +151,17 @@ class CloseEstimateController extends Controller {
                         'id' => $id,
                         'model_upload' => $model_upload,
             ]);
+        } elseif ($appointment->closeestimate_status == 0) {
+            $post_id = Yii::$app->session['post']['id'];
+            if ($post_id != 1 && $post_id != 4) {
+                return $this->render('_closed', [
+                            'model' => $model,
+                            'estimates' => $estimates,
+                            'appointment' => $appointment,
+                            'id' => $id,
+                            'model_upload' => $model_upload,
+                ]);
+            }
         }
         return $this->render('add', [
                     'model' => $model,
@@ -793,23 +804,22 @@ class CloseEstimateController extends Controller {
             return $this->redirect(['add', 'id' => $id]);
         }
     }
-    
-     public function actionChangeEstimateStatus($id) {
+
+    public function actionChangeEstimateStatus($id) {
         $appointment = Appointment::findOne($id);
-        $appointment->status = 1;
+        $appointment->closeestimate_status = 1;
         $appointment->save(false);
         return $this->redirect(['add', 'id' => $id]);
     }
-    
+
     public function actionCloseEstimateComplete($id) {
         $appointment = Appointment::findOne($id);
         $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
         if (!empty($estimates)) {
-                $appointment->closeestimate_status = 0;
-                $appointment->UB = Yii::$app->user->identity->id;
-                $appointment->save(FALSE);
-                return $this->redirect(['add', 'id' => $id]);
-            
+            $appointment->closeestimate_status = 0;
+            $appointment->UB = Yii::$app->user->identity->id;
+            $appointment->save(FALSE);
+            return $this->redirect(['add', 'id' => $id]);
         } else {
             Yii::$app->getSession()->setFlash('error', 'Close Estimate Not Completed..');
             return $this->redirect(['add', 'id' => $id]);
