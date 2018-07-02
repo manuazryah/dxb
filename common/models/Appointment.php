@@ -155,7 +155,7 @@ class Appointment extends \yii\db\ActiveRecord {
     public function getDebtorTax($debtor_id) {
         $data = Debtor::findOne(['id' => $debtor_id]);
         if ($data->tax != '') {
-            return 'VAT / TAX ID : ' . $data->tax;
+            return 'TRN : ' . $data->tax;
         } else {
             return '';
         }

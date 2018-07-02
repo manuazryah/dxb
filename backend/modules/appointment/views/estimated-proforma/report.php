@@ -225,14 +225,14 @@ $currency = Currency::findOne(1);
                         <div class="main-left">
                             <table class="tb2">
                                 <tr>
-                                    <td style="width: 55px;">TO </td> <td style="width: 40px;text-align: center">:</td>
+                                    <td style="width: 55px;"><strong>TO </strong></td> <td style="width: 40px;text-align: center">:</td>
                                     <td style="max-width: 250px">
-                                        <span style="font-weight:600;"><?= $princip != '' ? common\models\Debtor::findOne($princip)->principal_name : '' ?></span><br/>
-                                        <?= $appointment->getEpdaAddress($princip); ?><br/>
+                                        <strong><span style="font-weight:600;"><?= $princip != '' ? common\models\Debtor::findOne($princip)->principal_name : '' ?></span><br/>
+                                        <?= $appointment->getEpdaAddress($princip); ?><br/></strong>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 55px;font-weight: 600;">TAX /VAT ID </td> <td style="width: 40px;text-align: center">:</td>
+                                    <td style="width: 55px;font-weight: 600;">TRN </td> <td style="width: 40px;text-align: center">:</td>
                                     <td style="max-width: 405px;font-weight: 600;">
                                         <?= $appointment->getDebtorTax($princip); ?>
                                     </td>
@@ -242,15 +242,15 @@ $currency = Currency::findOne(1);
                         <div class="main-right">
                             <table class="tb2">
                                 <tr>
-                                    <td>Date </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td><strong>Date </strong></td> <td style="width: 50px;text-align: center">:</td>
                                     <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td><strong>Client Code </strong></td> <td style="width: 50px;text-align: center">:</td>
                                     <td style="max-width: 200px"><?= $appointment->getClintCode($princip); ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Client Ref </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td><strong>Client Ref </strong></td> <td style="width: 50px;text-align: center">:</td>
                                     <td style="max-width: 200px"><?= $appointment->client_reference ?></td>
                                 </tr>
                             </table>
@@ -263,11 +263,11 @@ $currency = Currency::findOne(1);
                         <div class="topcontent-left">
                             <table class="">
                                 <tr>
-                                    <td>Port </td> <td>:</td>
+                                    <td><strong>Port </strong></td> <td>:</td>
                                     <td><?= $appointment->portOfCall->port_name ?></td>
                                 </tr>
                                 <tr>
-                                    <td>ETA </td> <td>:</td>
+                                    <td><strong>ETA </strong></td> <td>:</td>
                                     <td><?= Yii::$app->SetValues->DateFormate($appointment->eta); ?></td>
                                 </tr>
                             </table>
@@ -275,7 +275,7 @@ $currency = Currency::findOne(1);
                         <div class="topcontent-center">
                             <table class="">
                                 <tr>
-                                    <td>Vessel </td> <td>:</td>
+                                    <td><strong>Vessel</strong> </td> <td>:</td>
                                     <td><?php
                                         if ($appointment->vessel_type == 1) {
                                             echo 'T - ' . $appointment->tug != '' ? Vessel::findOne($appointment->tug)->vessel_name : '' . ' / B - ' . $appointment->barge != '' ? Vessel::findOne($appointment->barge)->vessel_name : '';
@@ -287,7 +287,7 @@ $currency = Currency::findOne(1);
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Purpose </td> <td>:</td>
+                                    <td><strong>Purpose </strong></td> <td>:</td>
                                     <td>
                                         <?php if ($appointment->purpose != '') { ?>
                                             <?= $appointment->purpose0->purpose ?>
@@ -301,14 +301,14 @@ $currency = Currency::findOne(1);
                             <table class="">
                                 <?php if ($epda_template->tax_id != '') { ?>
                                     <tr style="font-weight:700;">
-                                        <td>TAX / VAT ID</td>
+                                        <td><strong>TRN</strong></td>
                                         <td>:</td>
                                         <td><?= $epda_template->tax_id ?></td>
                                     </tr>
                                 <?php }
                                 ?>
                                 <tr>
-                                    <td>Ref No </td> <td>:</td>
+                                    <td><strong>Ref No </strong></td> <td>:</td>
                                     <?php
                                     $arr = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
                                     $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
@@ -322,7 +322,7 @@ $currency = Currency::findOne(1);
                                     <td><?php echo $ref_no; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Ops no </td>
+                                    <td><strong>Ops no </strong></td>
                                     <td>:</td>
                                     <td><?= $appointment->appointment_no ?></td>
                                 </tr>
@@ -486,7 +486,7 @@ $currency = Currency::findOne(1);
                                 <?php
                                 $usd = round(($grandtotal + $grand_taxtotal) * $currency->currency_value, 3);
                                 ?>
-                                <td style="width: 80%; text-align: center;" rowspan="2"><b>Grand Total Estimate</b></td>
+                                <td style="width: 80%; text-align: center;" rowspan=""><b>Grand Total Estimate</b></td>
                                 <?php if ($appointment->currency == 1) { ?>
                                     <td style="width: 10%;font-weight: bold;">
                                         AED : <?= Yii::$app->SetValues->NumberFormat($grandtotal + $grand_taxtotal); ?>
@@ -501,16 +501,6 @@ $currency = Currency::findOne(1);
                                     <td style="width: 10%;font-weight: bold;">
                                         AED : <?= Yii::$app->SetValues->NumberFormat($grandtotal + $grand_taxtotal); ?>
                                     </td>
-                                <?php }
-                                ?>
-                            </tr>
-                            <tr>
-                                <?php if ($appointment->currency == 1) { ?>
-                                    <td style="width: 10%;font-weight: bold;">AED : <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic($grandtotal + $grand_taxtotal); ?></span></td>
-                                    <td style="width: 10%;font-weight: bold;">USD : <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic($usd) ?></span></td>
-                                <?php } else { ?>
-                                    <td style="width: 10%;font-weight: bold;">USD : <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic($usd) ?></span></td>
-                                    <td style="width: 10%;font-weight: bold;">AED : <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic($grandtotal + $grand_taxtotal); ?></span></td>
                                 <?php }
                                 ?>
                             </tr>

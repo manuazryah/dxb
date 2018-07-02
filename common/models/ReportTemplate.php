@@ -70,7 +70,7 @@ class ReportTemplate extends \yii\db\ActiveRecord {
             'bank' => 'Bank',
             'account_mannager_email' => 'Account Mannager Email',
             'account_mannager_phone' => 'Account Mannager Phone',
-            'tax_id' => 'TAX / VAT ID',
+            'tax_id' => 'TRN',
              'status' => 'Status',
             'CB' => 'Cb',
             'UB' => 'Ub',

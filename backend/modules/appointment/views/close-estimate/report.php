@@ -314,13 +314,13 @@ and open the template in the editor.
                                 <td rowspan="2" style="width: 50%;">
                                     <p>
                                         <strong>From,</strong><br><br>
-                                        <strong>Emperor SHIPPING LINES LLC</strong><br>
-                                        #215, AL AHBABI BLD 2, 2ND FLOOR<br>
-                                        NEAR DUBAI GRAND HOTEL, AL QUASIS<br>
-                                        P.O.BOX - 233797, DUBAI, UAE
+                                        <strong>Emperor SHIPPING LINES LLC<br>
+                                            #215, AL AHBABI BLD 2, 2ND FLOOR<br>
+                                            NEAR DUBAI GRAND HOTEL, AL QUASIS<br>
+                                            P.O.BOX - 233797, DUBAI, UAE</strong>
                                     </p>
                                     <?php if ($fda_template->tax_id != '') { ?>
-                                        <p style="font-weight:700;">VAT / TAX ID : <?= $fda_template->tax_id ?></p>
+                                        <p style="font-weight:700;">TRN : <?= $fda_template->tax_id ?></p>
                                     <?php }
                                     ?>
                                 </td>
@@ -379,6 +379,7 @@ and open the template in the editor.
                             <tr>
                                 <td rowspan="3" style="width: 50%;">
                                     <p>
+                                        <strong>
                                         <?php
                                         if ($principp != '') {
                                             echo '<b>To</b>,<br><br>';
@@ -388,15 +389,18 @@ and open the template in the editor.
                                             echo $appointment->getInvoiceAddress($appointment->principal);
                                         }
                                         ?>
+                                        </strong>
                                     </p>
                                     <p style="font-weight: 700;">
-                                        <?php
-                                        if ($principp != '') {
-                                            echo $appointment->getDebtorTax($principp);
-                                        } else {
-                                            echo $appointment->getDebtorTax($appointment->principal);
-                                        }
-                                        ?>
+                                        <strong>
+                                            <?php
+                                            if ($principp != '') {
+                                                echo $appointment->getDebtorTax($principp);
+                                            } else {
+                                                echo $appointment->getDebtorTax($appointment->principal);
+                                            }
+                                            ?>
+                                        </strong>
                                     </p>
                                 </td>
                                 <td style="width: 25%;"><strong>Vessel Name :</strong> <?php

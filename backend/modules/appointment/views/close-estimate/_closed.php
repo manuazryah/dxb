@@ -106,42 +106,46 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $grandtotal = 0;
                                 $epdatotal = 0;
                                 $fdatotal = 0;
-                                foreach ($estimates as $estimate):
-                                    $i++;
-                                    ?>
-                                    <tr>
-                                        <td><?= $i; ?></td>
-                                        <td><span class="co-name"><?= $estimate->service->service ?></span></td>
-                                        <td><?= isset($estimate->supplier0->name) ? $estimate->supplier0->name : '' ?></td>
-        <!--                                                                <td><? //$estimate->currency0->currency_symbol ?></td>-->
-                                        <td><?= $estimate->unit_rate; ?></td>
-                                        <td><?= $estimate->unit; ?></td>
-        <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                        <td><?= $estimate->epda; ?></td>
-                                        <td><?= $estimate->fda; ?></td>
-                                        <?php
-                                        if ($estimate->payment_type == 1) {
-                                            $payment_type = 'Manual';
-                                        } elseif ($estimate->payment_type == 2) {
-                                            $payment_type = 'Check';
-                                        } else {
-                                            $payment_type = '';
-                                        }
-                                        ?>
-                                        <td><?= $payment_type; ?></td>
-                                        <td><?= $estimate->total; ?></td>
-                                        <td><?= $estimate->invoice->invoice_type ?></td>
-                                        <td><?= $estimate->principal0->principal_name; ?></td>
-                                        <td><?= $estimate->comments; ?></td>
-                                        <?php
-                                        $epdatotal += $estimate->epda;
-                                        $fdatotal += $estimate->fda;
-                                        $grandtotal += $estimate->total;
-                                        ?>
-                                    </tr>
+                                if (!empty($estimates)) {
+                                    foreach ($estimates as $estimate) {
+                                        if (!empty($estimate)) {
+                                            $i++;
+                                            ?>
+                                            <tr>
+                                                <td><?= $i; ?></td>
+                                                <td><span class="co-name"><?= $estimate->service->service ?></span></td>
+                                                <td><?= isset($estimate->supplier0->name) ? $estimate->supplier0->name : '' ?></td>
+                <!--                                                                <td><? //$estimate->currency0->currency_symbol ?></td>-->
+                                                <td><?= $estimate->unit_rate; ?></td>
+                                                <td><?= $estimate->unit; ?></td>
+                <!--                                                                <td><? $estimate->roe; ?></td>-->
+                                                <td><?= $estimate->epda; ?></td>
+                                                <td><?= $estimate->fda; ?></td>
+                                                <?php
+                                                if ($estimate->payment_type == 1) {
+                                                    $payment_type = 'Manual';
+                                                } elseif ($estimate->payment_type == 2) {
+                                                    $payment_type = 'Check';
+                                                } else {
+                                                    $payment_type = '';
+                                                }
+                                                ?>
+                                                <td><?= $payment_type; ?></td>
+                                                <td><?= $estimate->total; ?></td>
+                                                <td><?= $estimate->invoice_type != ''?InvoiceType::findOne($estimate->invoice_type)->invoice_type :'' ?></td>
+                                                <td><?= $estimate->principal0->principal_name; ?></td>
+                                                <td><?= $estimate->comments; ?></td>
+                                                <?php
+                                                $epdatotal += $estimate->epda;
+                                                $fdatotal += $estimate->fda;
+                                                $grandtotal += $estimate->total;
+                                                ?>
+                                            </tr>
 
-                                    <?php
-                                endforeach;
+                                            <?php
+                                        }
+                                    }
+                                }
                                 ?>
                                 <tr>
                                     <td></td>
@@ -286,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="row" style="width: 180px;display: inline-block;" title="<?= $princip_name1 ?>">
                                         <div class="upload_file_list" style="float:left;height: 55px;">
                                             <div>
-                                                <!--<span class=""><?php // echo Html::a($invoice_number, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('/appointment/close-estimate/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';            ?></span>-->
+                                                <!--<span class=""><?php // echo Html::a($invoice_number, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('/appointment/close-estimate/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';              ?></span>-->
                                                 <span class=""><?php echo Html::a($invoice_number, ['/appointment/close-estimate/show-report', 'id' => $estmate_report->id], ['target' => "_blank"]) . '&nbsp;&nbsp;'; ?></span>
                                             </div>
                                             <div style="color:#676262;">
@@ -322,7 +326,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="row" style="width: 170px;display: inline-block;" title="<?= $princip_name ?>">
                                         <div class="upload_file_list" style="float:left;height: 55px;">
                                             <div>
-                                                <!--<span class=""><?php // echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('/appointment/close-estimate/show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;';          ?></span>-->
+                                                <!--<span class=""><?php // echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('/appointment/close-estimate/show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;';            ?></span>-->
                                                 <span class=""><?php echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report', 'id' => $estmate_all_report->id], ['target' => "_blank"]) . '&nbsp;&nbsp;'; ?></span>
                                             </div>
                                             <div style="color:#676262;">
@@ -366,17 +370,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ?>
                             </div>
                         </div>
-                    </div>
-
-                    <div style="float:right;padding-top: 5px;">
-                        <?php if ($token == 1) { ?>
-                            <button class="btn btn-red">Closed</button>
-                            <?php
-                        } else {
-                            echo Html::a('<span> Close Estimate Completed</span>', ['close-estimate/estimate-complete', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
-                        }
-                        ?>
-
                     </div>
                 </div>
             </div>

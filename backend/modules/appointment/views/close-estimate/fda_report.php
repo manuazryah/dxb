@@ -286,16 +286,20 @@ and open the template in the editor.
                                 <tr>
                                     <td style="max-width: 250px">
                                         <p><strong>To,</strong></p>
-                                        <?php
-                                        echo Debtor::findOne($princip->principal)->invoicing_address;
-                                        ?>
+                                        <strong>
+                                            <?php
+                                            echo Debtor::findOne($princip->principal)->invoicing_address;
+                                            ?>
+                                        </strong>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="max-width: 405px;font-weight: 700;">
-                                        <?php
-                                        echo $appointment->getDebtorTax($princip->principal)
-                                        ?>
+                                        <strong>
+                                            <?php
+                                            echo $appointment->getDebtorTax($princip->principal)
+                                            ?>
+                                        </strong>
                                     </td>
                                 </tr>
                             </table>
@@ -357,7 +361,7 @@ and open the template in the editor.
                                 </tr>
                                 <?php if ($fda_template->tax_id != '') { ?>
                                     <tr style="font-weight:600;">
-                                        <td><strong>VAT / TAX ID</strong></td> <td style="width: 50px;text-align: center">:</td>
+                                        <td><strong>TRN</strong></td> <td style="width: 50px;text-align: center">:</td>
                                         <td style="max-width: 200px"><?= $fda_template->tax_id ?></td>
                                     </tr>
                                 <?php }

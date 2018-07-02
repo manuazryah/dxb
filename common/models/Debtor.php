@@ -58,7 +58,7 @@ class Debtor extends \yii\db\ActiveRecord {
                     'mobile' => 'Mobile',
                     'tele_phone' => 'Tele Phone',
                     'fax' => 'Fax',
-                    'tax' => 'VAT / TAX ID',
+                    'tax' => 'TRN',
                     'invoicing_address' => 'Invoicing Address',
                     'epda_address' => 'EPDA Address',
                     'da_dispatch_addresss_1' => 'Da Dispatch Addresss 1',
