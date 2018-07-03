@@ -21,10 +21,10 @@ use Yii;
  * @property integer $CB
  * @property integer $UB
  * @property string $DOC
+ * @property string $DOU
  *
  * @property Logistics $logistics
- * @property LogisticsService $service0
- * @property LogisticsService[] $logisticsServices
+ * @property Service $service0
  * @property TaxMaster $vat
  */
 class LogisticsService extends \yii\db\ActiveRecord
@@ -45,9 +45,10 @@ class LogisticsService extends \yii\db\ActiveRecord
         return [
             [['logistics_id', 'service', 'qty', 'vat_id', 'vat_percentage', 'status', 'CB', 'UB'], 'integer'],
             [['unit_price', 'taxable_value', 'vat_amount', 'total'], 'number'],
-            [['DOC','DOU'], 'safe'],
+            [['service', 'unit_price'], 'required'],
+            [['DOC', 'DOU'], 'safe'],
             [['logistics_id'], 'exist', 'skipOnError' => true, 'targetClass' => Logistics::className(), 'targetAttribute' => ['logistics_id' => 'id']],
-            [['service'], 'exist', 'skipOnError' => true, 'targetClass' => LogisticsService::className(), 'targetAttribute' => ['service' => 'id']],
+            [['service'], 'exist', 'skipOnError' => true, 'targetClass' => Service::className(), 'targetAttribute' => ['service' => 'id']],
             [['vat_id'], 'exist', 'skipOnError' => true, 'targetClass' => TaxMaster::className(), 'targetAttribute' => ['vat_id' => 'id']],
         ];
     }
@@ -72,6 +73,7 @@ class LogisticsService extends \yii\db\ActiveRecord
             'CB' => 'Cb',
             'UB' => 'Ub',
             'DOC' => 'Doc',
+            'DOU' => 'Dou',
         ];
     }
 
@@ -88,15 +90,7 @@ class LogisticsService extends \yii\db\ActiveRecord
      */
     public function getService0()
     {
-        return $this->hasOne(LogisticsService::className(), ['id' => 'service']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLogisticsServices()
-    {
-        return $this->hasMany(LogisticsService::className(), ['service' => 'id']);
+        return $this->hasOne(Service::className(), ['id' => 'service']);
     }
 
     /**

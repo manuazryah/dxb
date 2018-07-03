@@ -67,34 +67,49 @@ class LogisticsController extends Controller {
                     'model' => $model,
         ]);
     }
-    
+
     /*
      * Add Logistics Services
      */
-    
-    public function actionAdd($id, $service_id = NULL) {
-                $services = \common\models\LogisticsService::findAll(['logistics_id' => $id]);
-                $logistics = Logistics::findOne(['id' => $id]);
-                if (!isset($service_id)) {
-                        $model = new \common\models\LogisticsService();
-                } else {
-                        $model = \common\models\LogisticsService::find()->where(['id' => $service_id])->one();
-                }
-                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
-//                        $model->total = $model->qty * $model->unit_price;
-//                        $model->invoice_id = $id;
-                        if ($model->save()) {
-                                return $this->redirect(['add', 'id' => $id]);
-                        }
-                }
 
-                return $this->render('add', [
-                            'model' => $model,
-                            'services' => $services,
-                            'id' => $id,
-                            'logistics' => $logistics,
-                ]);
+    public function actionAdd($id, $service_id = NULL) {
+        if (!isset($service_id)) {
+            $model = new \common\models\LogisticsService();
+        } else {
+            $model = \common\models\LogisticsService::find()->where(['id' => $service_id])->one();
         }
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
+            $model->taxable_value = $model->qty * $model->unit_price;
+            $model->vat_amount = 0;
+            $model->vat_percentage = 0;
+            if (isset($model->vat_id) && $model->vat_id != '') {
+                $vat_data = \common\models\TaxMaster::find()->where(['id' => $model->vat_id])->one();
+                if (!empty($vat_data)) {
+                    if ($vat_data->value != '' && $vat_data->value > 0 && $model->taxable_value > 0) {
+                        $model->vat_percentage = $vat_data->value;
+                        $tax_amount = (($model->taxable_value * $model->vat_percentage) / 100);
+                        $grand_total = ($model->taxable_value + $tax_amount);
+                        $model->total = $grand_total;
+                        $model->vat_amount = $tax_amount;
+                    } else {
+                        $model->total = $model->taxable_value;
+                    }
+                }
+            }
+            $model->logistics_id = $id;
+            if ($model->save()) {
+                return $this->redirect(['add', 'id' => $id]);
+            }
+        }
+        $services = \common\models\LogisticsService::findAll(['logistics_id' => $id]);
+        $logistics = Logistics::findOne(['id' => $id]);
+        return $this->render('add', [
+                    'model' => $model,
+                    'services' => $services,
+                    'id' => $id,
+                    'logistics' => $logistics,
+        ]);
+    }
 
     /**
      * Updates an existing Logistics model.
@@ -109,6 +124,7 @@ class LogisticsController extends Controller {
             return $this->redirect(['update', 'id' => $model->id]);
         } return $this->render('update', [
                     'model' => $model,
+                    'id' => $id,
         ]);
     }
 
@@ -124,6 +140,14 @@ class LogisticsController extends Controller {
         return $this->redirect(['index']);
     }
 
+    public function actionDeleteService($id) {
+        $model = \common\models\LogisticsService::find()->where(['id' => $id])->one();
+        if (!empty($model)) {
+            $model->delete();
+        }
+        return $this->redirect(['add', 'id' => $id]);
+    }
+
     /**
      * Finds the Logistics model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -136,6 +160,40 @@ class LogisticsController extends Controller {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /*
+     * Get Unit price from servive
+     * return unit price
+     */
+
+    public function actionGetService() {
+        if (Yii::$app->request->isAjax) {
+            $service_id = $_POST['service'];
+            $res = '';
+            $service_data = \common\models\Service::find()->where(['id' => $service_id])->one();
+            if (!empty($service_data)) {
+                $res = $service_data->unit_price != '' ? $service_data->unit_price : '';
+            }
+            return $res;
+        }
+    }
+
+    /*
+     * Get Vat value From Tax Master Table
+     * return unit price
+     */
+
+    public function actionGetTax() {
+        if (Yii::$app->request->isAjax) {
+            $vat_id = $_POST['vat_id'];
+            $res = '';
+            $tax_data = \common\models\TaxMaster::find()->where(['id' => $vat_id])->one();
+            if (!empty($tax_data)) {
+                $res = $tax_data->value != '' ? $tax_data->value : '';
+            }
+            return $res;
         }
     }
 
