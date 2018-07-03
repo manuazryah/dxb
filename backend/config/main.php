@@ -48,6 +48,9 @@ return [
         'settings' => [
             'class' => 'backend\modules\settings\Module',
         ],
+        'logistics' => [
+            'class' => 'backend\modules\logistics\Module',
+        ],
     ],
     'components' => [
         'request' => [

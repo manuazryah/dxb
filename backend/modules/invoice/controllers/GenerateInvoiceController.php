@@ -156,6 +156,7 @@ public function beforeAction($action) {
                 } else {
                         return $this->render('update', [
                                     'model' => $model,
+                                    'id' => $id,
                         ]);
                 }
         }

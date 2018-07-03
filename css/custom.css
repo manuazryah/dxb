@@ -11,7 +11,7 @@ a {
 }
 .form-inline .form-group{
     width: 25%;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     margin-bottom: 22px;
     color:#000000;
 }
@@ -76,6 +76,9 @@ table{
 }
 table th{
     color:#373e4a;
+}
+.pad-left-15{
+    padding-left: 15px !important;
 }
 table.table tr.filters{
     background-color: #f1efef;
