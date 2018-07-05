@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><?= $service_datas->service; ?></td>
+                                            <td><?= $service_datas->service0->service_name; ?></td>
                                             <td><?= $service_datas->unit_price; ?></td>
                                             <td><?= $service_datas->qty; ?></td>
                                             <td><?= $service_datas->taxable_value; ?></td>

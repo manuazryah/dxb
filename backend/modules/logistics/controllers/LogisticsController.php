@@ -196,5 +196,17 @@ class LogisticsController extends Controller {
             return $res;
         }
     }
+    
+    /*
+     * This function generate logistic report
+     */
+    public function actionReports($id) {
+        $logistics = Logistics::findOne($id);
+        $logistic_services = \common\models\LogisticsService::find()->where(['logistics_id'=>$id])->all();
+        return $this->renderPartial('reports', [
+            'logistics'=>$logistics,
+            'logistic_services'=>$logistic_services,
+        ]);
+    }
 
 }
