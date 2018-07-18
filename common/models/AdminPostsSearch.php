@@ -18,7 +18,7 @@ class AdminPostsSearch extends AdminPosts
     public function rules()
     {
         return [
-            [['id', 'admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB'], 'integer'],
+            [['id', 'admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB','logistics'], 'integer'],
             [['post_name', 'DOC', 'DOU'], 'safe'],
         ];
     }
@@ -66,6 +66,7 @@ class AdminPostsSearch extends AdminPosts
             'estimated_proforma' => $this->estimated_proforma,
             'port_call_data' => $this->port_call_data,
             'close_estimate' => $this->close_estimate,
+            'logistics' => $this->logistics,
             'status' => $this->status,
             'CB' => $this->CB,
             'UB' => $this->UB,

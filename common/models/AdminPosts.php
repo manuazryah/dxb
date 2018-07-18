@@ -38,7 +38,7 @@ class AdminPosts extends \yii\db\ActiveRecord {
         public function rules() {
                 return [
                         [['post_name'], 'required'],
-                        [['admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB', 'funding_allocation'], 'integer'],
+                        [['admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB', 'funding_allocation','logistics'], 'integer'],
                         [['DOC', 'DOU'], 'safe'],
                         [['post_name'], 'string', 'max' => 100],
                 ];
@@ -58,6 +58,7 @@ class AdminPosts extends \yii\db\ActiveRecord {
                     'port_call_data' => 'Port Call Data',
                     'close_estimate' => 'Close Estimate',
                     'funding_allocation' => 'Fund Allocation',
+                    'logistics' => 'Logistics',
                     'status' => 'Status',
                     'CB' => 'Cb',
                     'UB' => 'Ub',

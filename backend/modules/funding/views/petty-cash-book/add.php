@@ -80,13 +80,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $j = 0;
                                 $fda = 0;
                                 $amount_debit_total = 0;
+                                $actual_total = 0;
+                                $balance_total = 0;
                                 foreach ($close_estimates as $close_estimate) {
                                     $j++;
                                     ?>
                                     <tr class="filter">
                                         <td><?= $j; ?></td>
                                         <td><?= Services::findOne($close_estimate->service_id)->service; ?></td>
-                                        <td><?= Contacts::findOne($close_estimate->supplier)->name; ?></td>
+                                        <td><?= $close_estimate->supplier != '' ? Contacts::findOne($close_estimate->supplier)->name : '' ?></td>
                                         <td><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
                                         <?php
                                         $actual_funding = ActualFunding::findOne(['close_estimate_id' => $close_estimate->id]);
@@ -103,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             $funding = common\models\PettyCashBook::findAll(['close_estimate_id' => $close_estimate->id]);
                                             $debit_balance = 0;
                                             $fund_balance = 0;
+                                            $balance = 0;
                                             foreach ($funding as $fund) {
                                                 $debit_balance += $fund->amount_debit;
                                                 $balance += $fund->amount_debit;
@@ -135,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ?>
                                         </td>
                                         <?php
-                                        $actual_total = $actual_total += $actual_funding->actual_amount;
+                                        $actual_total += $actual_funding->actual_amount;
                                         $amount_debit_total += $debit_balance;
                                         $balance_total += $actual_funding->actual_amount - $debit_balance;
                                         ?>
@@ -188,59 +191,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>js/select2/select2-bootstrap.css">
                 <script src="<?= Yii::$app->homeUrl; ?>js/select2/select2.min.js"></script>
 
-<!--                                <script>
-                                        $(document).ready(function () {
-                                                $("#closeestimatesubservice-unit").keyup(function () {
-                                                        multiply();
-                                                });
-                                                $("#closeestimatesubservice-unit_price").keyup(function () {
-                                                        multiply();
-                                                });
-                                        });
-                                        function multiply() {
-                                                var rate = $("#closeestimatesubservice-unit").val();
-                                                var unit = $("#closeestimatesubservice-unit_price").val();
-                                                if (rate != '' && unit != '') {
-                                                        $("#closeestimatesubservice-total").val(rate * unit);
-                                                }
-
-                                        }
-                                        $("#closeestimatesubservice-total").prop("disabled", true);
-                                        $("#fundingallocation-check_no").prop("disabled", true);
-                                        $('#fundingallocation-payment_type').change(function () {
-                                                var payment_id = $(this).val();
-                                                if (payment_id == 2) {
-                                                        $("#fundingallocation-check_no").prop("disabled", false);
-                                                } else {
-                                                        $("#fundingallocation-check_no").prop("disabled", true);
-                                                }
-                                        });
-                                </script>-->
             </div>
             <?php //Pjax::end();             ?>
         </div>
     </div>
 </div>
-<!--<a href="javascript:;" onclick="showAjaxModal();" class="btn btn-primary btn-single btn-sm">Show Me</a>
- Modal code
-<script type="text/javascript">
-        function showAjaxModal(id)
-        {
-            jQuery('#add-sub').modal('show', {backdrop: 'static'});
-            jQuery('#add-sub .modal-body').html(id);
-            /*setTimeout(function ()
-             {
-             jQuery.ajax({
-             url: "data/ajax-content.txt",
-             success: function (response)
-             {
-             jQuery('#modal-7 .modal-body').html(response);
-             }
-             });
-             }, 800); // just an example
-             */
-        }
-</script>-->
 <div class="modal fade" id="add-sub">
     <div class="modal-dialog">
         <div class="modal-content">

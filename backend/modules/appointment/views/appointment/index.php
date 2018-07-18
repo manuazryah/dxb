@@ -108,6 +108,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'next_port',
                             // 'eta',
                             [
+                                'attribute' => 'invoice_no',
+                                'format' => 'raw',
+                                'value' => function($data, $key, $index, $column) {
+                                    return $data->getInvoiceNo($data->id);
+                                },
+                            ],
+                            [
                                 'attribute' => 'stage',
                                 'value' => 'stages0.stage',
                                 'filter' => ArrayHelper::map(Stages::find()->asArray()->all(), 'id', 'stage'),

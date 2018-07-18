@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr class="filter">
                                         <td><?= $j; ?></td>
                                         <td><?= Services::findOne($close_estimate->service_id)->service; ?></td>
-                                        <td><?= Contacts::findOne($close_estimate->supplier)->name; ?></td>
+                                        <td><?= $close_estimate->supplier != '' ? Contacts::findOne($close_estimate->supplier)->name : '' ?></td>
                                         <?php
                                         $actual_funding = ActualFunding::findOne(['close_estimate_id' => $close_estimate->id]);
                                         ?>
@@ -174,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ?>
                                             <!--<input type="text" name="invoice_date[<?= $close_estimate->id; ?>]" value="<?= $invoice_date ?>" />-->
                                         </td>
-                                        <!--<td><?php // Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit'])                                                                                                                                                                       ?></td>-->
+                                        <!--<td><?php // Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit'])                                                                                                                                                                        ?></td>-->
                                         <?php
                                         $actual_total = $actual_total += $actual_funding->actual_amount;
                                         $amount_debit_total += $debit_balance;

@@ -33,6 +33,8 @@ use Yii;
  * @property string $DOU
  */
 class Appointment extends \yii\db\ActiveRecord {
+    
+    public $invoice_no;
 
     /**
      * @inheritdoc
@@ -207,6 +209,22 @@ class Appointment extends \yii\db\ActiveRecord {
             }
         }
 
+        return $result;
+    }
+    
+    public static function getInvoiceNo($id) {
+        $fda_report = FdaReport::find()->where(['appointment_id' => $id])->all();
+        $result = '';
+        $i = 0;
+        if (!empty($fda_report)) {
+            foreach ($fda_report as $value) {
+                if ($i != 0) {
+                    $result .= ',<br/>';
+                }
+               $result .= \yii\helpers\Html::a($value->invoice_number, ['/appointment/close-estimate/show-all-report', 'id' => $value->id], ['target' => '_blank']);
+                $i++;
+            }
+        }
         return $result;
     }
 

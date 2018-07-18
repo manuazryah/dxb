@@ -115,6 +115,37 @@
         .description-tb3 td{
             line-height: 25px;
         }
+        .heading-bank{
+            background: #484646;
+            padding: 5px 0px;
+            color: white;
+            text-align: center;
+            margin: 20px 0px;
+        }
+        .bank-content{
+            text-align: center;
+        }
+        .bank-content p{
+            font-size: 12px;
+        }
+        .note{
+            text-align: center;
+            margin: 20px 0px;
+        }
+        .note p{
+            font-size: 14px;
+        }
+        .note p>strong{
+            font-size: 13px;
+        }
+        .footer-text{
+            text-align: center;
+            border-top: 1px solid #b7b5b5;
+        }
+        .footer-text p{
+            font-size: 11px;
+            line-height: 2px;
+        }
     </style>
     <table border ="0"  class="main-tabl" border="0">
         <thead>
@@ -302,7 +333,34 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <div class="heading-bank">Bank Account Details</div>
+                    <div class="bank-content">
+                        <p>Beneficiary: EMPEROR SHIPPING LINES L.L.C, P.O.BOX:233797, AL QUSAIS, DUBAI, U.A.E</p>
+                        <p>Bank: RAK BANK (NATIONAL BANK OF RAS AL KHAIMAH) | NK MALL, AJMAN BRANCH, AJMAN, U.A.E</p>
+                        <p>Account Details: USD A/C #0019-487184-062 | SWIFT CODE: NRAKAEAK | IBAN NO: AE 72040 00000 19487 184062</p>
+                        <p>Account Details: USD A/C #0019-487184-061 | SWIFT CODE: NRAKAEAK | IBAN NO: AE 72040 00000 19487 184061</p>
+                    </div>
+                    <div class="note">
+                        <p>Thank you for your business!</p>
+                        <p><strong>This is computer generated invoice, no signature required</strong></p>
+                    </div>
+                </td>
+            </tr>
         </tbody>
+        <tfoot>
+            <tr>
+                <td style="width:100%">
+                    <div class="footer-text">
+                        <p>Head Office : Dubai - U.A.E., P.O.Box : 233797, Tel.:+971 4239 2266, Fax : + 971 4239 2244, E-mail : emperor@emperorlines.com</p>
+                        <p>Branch : Fujairah - U.A.E., P.O.Box : 9544, Tel.:+971 9223 4567, Fax : + 971 9223 4566, E-mail : empfuj@emperor.ae</p>
+                        <p>Branch : Sharjah / Khorfakkan,Suite No.:#222,Floor02,Warmseas Bldg, Tel: +971 223 4567 , Mob: +971 55 300 1545, E-mail : kfk@emperor.ae</p>
+                        <p>Branch : Ras Al Khaimah, Tel: +971 7268, Mob.: +971 55 300 1535, E-mail : operak@emperor.ae</p>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 <script>

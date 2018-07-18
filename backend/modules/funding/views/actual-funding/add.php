@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr class="filter">
                                         <td><?= $j; ?></td>
                                         <td><?= Services::findOne($fund->service_id)->service; ?></td>
-                                        <td><?= Contacts::findOne($fund->supplier)->name; ?></td>
+                                        <td><?= $fund->supplier != '' ? Contacts::findOne($fund->supplier)->name : '' ?></td>
                                         <td>
                                             <?php
                                             if (isset($fund->unit_rate)) {

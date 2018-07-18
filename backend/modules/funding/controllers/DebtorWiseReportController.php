@@ -18,12 +18,14 @@ class DebtorWiseReportController extends \yii\web\Controller {
             } else {
                 $model = FundingAllocation::find()->where(['between', 'fund_date', Yii::$app->request->post('from_date'), Yii::$app->request->post('to_date')])->all();
             }
-            foreach ($model as $key => $val) {
-                $new_arr[] = $val['appointment_id'];
-            }
-            if (!empty($new_arr)) {
-                $uniq_arr = array_unique($new_arr);
-            }
+        } else {
+            $model = FundingAllocation::find()->all();
+        }
+        foreach ($model as $key => $val) {
+            $new_arr[] = $val['appointment_id'];
+        }
+        if (!empty($new_arr)) {
+            $uniq_arr = array_unique($new_arr);
         }
         return $this->render('index', [
                     'debtors' => $debtors,
