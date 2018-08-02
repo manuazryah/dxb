@@ -102,6 +102,9 @@ $token = Yii::$app->request->get('token');
                         }
                         ?>
                         <div class="col-md-3">
+                            <input type="text" name="invoice_num" value="" class="form-control" placeholder="Invoice Number" required="">
+                        </div>
+                        <div class="col-md-3">
                             <?php
                             if (!empty($estimates)) {
                                 ?>
@@ -273,7 +276,7 @@ $token = Yii::$app->request->get('token');
                                             ?>
                                                         </span>
                                                 </td>-->
-                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ?></td>-->
+                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
                                             <td class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                 <?php
                                                 if ($estimate->invoice_type == '') {
@@ -349,7 +352,7 @@ $token = Yii::$app->request->get('token');
                                         <td style=""><?php echo Yii::$app->SetValues->NumberFormat($epda_sub_total) . '/-'; ?></td>
                                         <td style=""><?php echo Yii::$app->SetValues->NumberFormat($fda_sub_total) . '/-'; ?>
                                         <td></td>
-                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
+                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ?></td>-->
                                         <td colspan=""></td>
                                         <td colspan=""></td>
                                         <td colspan=""></td>
@@ -366,7 +369,7 @@ $token = Yii::$app->request->get('token');
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ?></td>-->
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>

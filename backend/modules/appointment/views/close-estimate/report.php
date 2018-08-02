@@ -224,6 +224,15 @@ and open the template in the editor.
             font-size: 12px;
             color: #464545;
         }
+        .closeestimate-content{
+            text-transform: uppercase;
+        }
+        .closeestimate-content p{
+            font-size: 11px;
+        }
+        .closeestimate-content td{
+            font-size: 11px !important;
+        }
     </style>
     <!--    </head>
         <body >-->
@@ -279,7 +288,8 @@ and open the template in the editor.
         <tbody>
             <tr>
                 <td>
-                    <div class="heading">VOYAGE DISBURSEMENT ACCOUNT</div>
+                    <div class="heading">TAX INVOICE</div>
+                    <div class="heading">FINAL DISBURSEMENT ACCOUNT</div>
                     <div class="closeestimate-content">
                         <?php
                         if ($principp != '') {
@@ -339,10 +349,10 @@ and open the template in the editor.
                                 } else {
                                     $principal_id = $appointment->principal;
                                 }
-                                $model_report = $this->context->InvoiceGeneration($appointment->id, $principal_id, $est_id);
+                                $model_report = $this->context->InvoiceGeneration($appointment->id, $principal_id, $est_id, $invoice_num);
                                 ?>
 
-                                <td style="width: 25%;"><strong>Invoice Number :</strong> <?= $model_report->invoice_number ?>-<?= $model_report->sub_invoice ?></td>
+                                <td style="width: 25%;"><strong>Invoice Number :</strong> <?= $model_report->invoice_number ?></td>
                                 <?php
                                 if ($invoice_date != '') {
                                     $date_invoice = date('d-M-Y', strtotime($invoice_date));
@@ -380,15 +390,15 @@ and open the template in the editor.
                                 <td rowspan="3" style="width: 50%;">
                                     <p>
                                         <strong>
-                                        <?php
-                                        if ($principp != '') {
-                                            echo '<b>To</b>,<br><br>';
-                                            echo $appointment->getInvoiceAddress($principp);
-                                        } else {
-                                            echo '<b>To</b>,<br><br>';
-                                            echo $appointment->getInvoiceAddress($appointment->principal);
-                                        }
-                                        ?>
+                                            <?php
+                                            if ($principp != '') {
+                                                echo '<b>To</b>,<br><br>';
+                                                echo $appointment->getInvoiceAddress($principp);
+                                            } else {
+                                                echo '<b>To</b>,<br><br>';
+                                                echo $appointment->getInvoiceAddress($appointment->principal);
+                                            }
+                                            ?>
                                         </strong>
                                     </p>
                                     <p style="font-weight: 700;">
@@ -424,12 +434,12 @@ and open the template in the editor.
                                     }
                                 }
                                 ?>
-                                <td style="width: 25%;"><strong>Ops Reference :</strong> <?php echo $appointment->appointment_no . $this->context->oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
+                                <td style="width: 25%;"><strong>Operation Job Number :</strong> <?php echo $appointment->appointment_no . $this->context->oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
                             </tr>
                             <?php ?>
                             <tr>
                                 <td style="width: 25%;"> <strong>Port of Call :</strong>  <?= $appointment->portOfCall->port_name ?> </td>
-                                <td style="width: 25%;"><strong>Client Job Reference No :</strong>  <?= $appointment->client_reference ?></td>
+                                <td style="width: 25%;"><strong>Voyage Number :</strong>  <?= $appointment->client_reference ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 25%;">  <strong>Arrival Date :</strong><?php
@@ -458,7 +468,7 @@ and open the template in the editor.
                                 <th style="width: 30%;">Particulars</th>
                                 <th style="width: 15%;">Invoice Reference</th>
                                 <th style="width: 12%;">Amount</th>
-                                <th style="width: 11%;">Wat %</th>
+                                <th style="width: 11%;">Vat %</th>
                                 <th style="width: 15%;">Taxable Amount</th>
                                 <th style="width: 11%;">Tax Amount</th>
                             </tr>
@@ -839,7 +849,7 @@ and open the template in the editor.
         <?php
         if ($save) {
             ?>
-            <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-all-report?appintment_id=<?= $appointment->id ?>&&principal_id=<?= $principp ?>&&est_id=<?= $est_id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+            <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-all-report?appintment_id=<?= $appointment->id ?>&&principal_id=<?= $principp ?>&&est_id=<?= $est_id ?>&&invoice_num=<?= $invoice_num ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
             <?php
         }
         ?>

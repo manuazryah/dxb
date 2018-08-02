@@ -237,6 +237,9 @@ AppAsset::register($this);
                             <?php
                         }
                         ?>
+                        <?php
+                        if (Yii::$app->session['post']['admin'] == 1) {
+                            ?>
                         <li>
                             <a href="">
                                 <i class="fa fa-print"></i>
@@ -253,22 +256,25 @@ AppAsset::register($this);
 
                             </ul>
                         </li>
-                        <?php
+                         <?php
+                        }
+                        ?>
+ <?php
                         if (Yii::$app->session['post']['admin'] == 1) {
                             ?>
-                            <li>
-                                <a href="">
-                                    <i class="fa fa-share"></i>
-                                    <span class="title">Tasks</span>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <?= Html::a('Tasks', ['/task/task/index'], ['class' => 'title']) ?>
-                                    </li>
+                        <li>
+                            <a href="">
+                                <i class="fa fa-share"></i>
+                                <span class="title">Tasks</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <?= Html::a('Tasks', ['/task/task/index'], ['class' => 'title']) ?>
+                                </li>
 
-                                </ul>
-                            </li>
-                            <?php
+                            </ul>
+                        </li>
+                         <?php
                         }
                         ?>
                         <?php
@@ -342,14 +348,14 @@ AppAsset::register($this);
                         <li class="dropdown hover-line hover-line-notify">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Notifications">
                                 <i class="fa-bell-o"></i>
-                                <!--<span class="badge badge-purple" id="notify-count"><?php // $notification_count                              ?></span>-->
+                                <!--<span class="badge badge-purple" id="notify-count"><?php // $notification_count                             ?></span>-->
                                 <span class="badge badge-purple" id="notify-count" style="color: #7c39bc;">.</span>
                             </a>
                             <ul class="dropdown-menu notifications">
                                 <li class="top">
                                     <p class="small">
                                         <!--                                        <a href="#" class="pull-right">Mark all Read</a>-->
-                                        You have <strong id="notify-counts"><?php // $notification_count   ?></strong> new notifications.
+                                        You have <strong id="notify-counts"><?php // $notification_count  ?></strong> new notifications.
                                     </p>
                                 </li>
 
@@ -393,14 +399,14 @@ AppAsset::register($this);
                         <li class="dropdown hover-line hover-line-task">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="My Tasks">
                                 <i class="fa-envelope-o"></i>
-                                <!--<span class="badge badge-green" id="my-task-count"><?php // $my_tasks_count                             ?></span>-->
+                                <!--<span class="badge badge-green" id="my-task-count"><?php // $my_tasks_count                            ?></span>-->
                                 <span class="badge badge-green" id="my-task-count" style="color: #8dc63e;">.</span>
                             </a>
                             <ul class="dropdown-menu my-task" style="width: 370px;">
                                 <li class="top">
                                     <p class="small">
                                         <!--                                        <a href="#" class="pull-right">Mark all Read</a>-->
-                                        You have <strong id="tasks-counts"><?php // $my_tasks_count   ?></strong> new tasks.
+                                        You have <strong id="tasks-counts"><?php // $my_tasks_count  ?></strong> new tasks.
                                     </p>
                                 </li>
 

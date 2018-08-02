@@ -88,7 +88,7 @@ class Appointment extends \yii\db\ActiveRecord {
             'last_port' => 'Last Port',
             'next_port' => 'Next Port',
             'eta' => 'ETA',
-            'client_reference' => 'Client Job Reference No',
+            'client_reference' => 'Voyage Number',
             'stage' => 'Stage',
             'estimate_status' => 'Estimate Status',
             'final_draft_bl' => 'Final Draft BL',

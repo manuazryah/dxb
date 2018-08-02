@@ -36,32 +36,6 @@ use yii\helpers\ArrayHelper;
     </div>
     <div class="row">
         <div class="col-md-4 pad-left-15">
-            <?php
-            if ($model->eta != '') {
-                $model->eta = date('Y-m-d');
-            }
-            ?>
-            <?=
-            $form->field($model, 'eta')->widget(\yii\jui\DatePicker::classname(), [
-                'dateFormat' => 'yyyy-MM-dd',
-                'options' => ['class' => 'form-control']
-            ])
-            ?>
-        </div>
-        <div class="col-md-4 pad-left-15">
-            <?php
-            if ($model->etd != '') {
-                $model->etd = date('Y-m-d');
-            }
-            ?>
-            <?=
-            $form->field($model, 'etd')->widget(\yii\jui\DatePicker::classname(), [
-                'dateFormat' => 'yyyy-MM-dd',
-                'options' => ['class' => 'form-control']
-            ])
-            ?>
-        </div>
-        <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'purpose_of_visit')->textInput() ?>
         </div>
         <div class="col-md-4 pad-left-15">

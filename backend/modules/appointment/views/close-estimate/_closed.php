@@ -51,6 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="clearfix"></div>
                 <hr class="appoint_history" />
+                <?php
+                if (Yii::$app->session['post']['close_estimate'] == 1) {
+                    echo Html::a('Open Close Estimate for Operations', ['change-estimate-status', 'id' => $appointment->id], ['class' => 'open-appt']);
+                }
+                ?>
                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                     <li>
                         <?php

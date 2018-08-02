@@ -54,7 +54,7 @@
             padding: 0px 10px;
         }
         .address-box p{
-            font-size: 13px;
+            font-size: 10px;
         }
         .address-box strong{
             font-size: 11px;
@@ -71,11 +71,11 @@
         .box-right-label{
             background: #484646;
             color: white;
-            padding: 4px 0px;
+            padding: 12px 0px;
             font-size: 11px;
         }
         .box-right-content{
-            padding: 4px 0px;
+            padding: 8px 0px;
             font-size: 11px;
         }
         .box-left-1{
@@ -146,6 +146,23 @@
             font-size: 11px;
             line-height: 2px;
         }
+        .address-box-to {
+            padding: 0px 10px;
+            width: 50%;
+        }
+        .address-box-to strong {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .address-box-to p {
+            font-size: 10px;
+            line-height: 20px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+        .terms-condition ol>li{
+            font-size: 13px;
+        }
     </style>
     <table border ="0"  class="main-tabl" border="0">
         <thead>
@@ -195,22 +212,20 @@
                                     <div class="box-right-content"><?= $logistics->invoice_no != '' ? $logistics->invoice_no : 'N/A' ?></div>
                                     <div class="box-right-label">DATE</div>
                                     <div class="box-right-content"><?= $logistics->invoice_date != '' ? $logistics->invoice_date : 'N/A' ?></div>
-                                    <div class="box-right-label">ETA</div>
-                                    <div class="box-right-content"><?= $logistics->eta != '' ? $logistics->eta : 'N/A' ?></div>
-                                    <div class="box-right-label">ETD</div>
-                                    <div class="box-right-content"><?= $logistics->etd != '' ? $logistics->etd : 'N/A' ?></div>
+                                    <div class="box-right-label">PURPOSE OF VISIT</div>
+                                    <div class="box-right-content"><?= $logistics->purpose_of_visit != '' ? $logistics->purpose_of_visit : 'N/A' ?></div>
                                 </table>
                             </div>
                         </div>
                         <div class="box-1">
                             <div class="box-left">
-                                <div class="address-box">
-                                    <p> <strong>To,</strong><p>
+                                <div class="address-box-to">
+                                    <p style="line-height: 8px;"> <strong>To,</strong><p>
                                         <?php
                                         if (!empty($logistics)) {
                                             if ($logistics->debtor != '') {
                                                 ?>
-                                            <p><strong><?= \common\models\LogisticDebtor::findOne($logistics->debtor)->name; ?></strong></p>
+                                            <p style="line-height: 5px;"><strong><?= \common\models\LogisticDebtor::findOne($logistics->debtor)->name; ?></strong></p>
                                             <p><?= \common\models\LogisticDebtor::findOne($logistics->debtor)->address; ?></p>
                                             <p><strong>TRN : <?= \common\models\LogisticDebtor::findOne($logistics->debtor)->trn_no; ?></strong></p>
                                             <?php
@@ -221,8 +236,6 @@
                             </div>
                             <div class="box-right">
                                 <table class="box-right-tbl">
-                                    <div class="box-right-label">PURPOSE OF VISIT</div>
-                                    <div class="box-right-content"><?= $logistics->purpose_of_visit != '' ? $logistics->purpose_of_visit : 'N/A' ?></div>
                                     <div class="box-right-label">VOYAGE</div>
                                     <div class="box-right-content"><?= $logistics->voyage != '' ? $logistics->voyage : 'N/A' ?></div>
                                     <div class="box-right-label">VESSEL</div>
@@ -318,18 +331,34 @@
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $amount_tot); ?></td>
                             </tr>
                             <tr>
-                                <td colspan="4" style="width:60%;text-align:right">TOTAL VAT</td>
+                                <td colspan="4" style="width:60%;text-align:right">VAT (5%)</td>
                                 <td style="width:15%;text-align:right"></td>
-                                <td style="width:10%;text-align:right">AED</td>
+                                <td style="width:10%;text-align:right"></td>
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $tax_tot); ?></td>
                             </tr>
-                            <tr>
-                                <td colspan="4" style="width:60%;text-align:center"><strong>AMOUNT PAYABLE INCLUSIVE OF TAX</strong></td>
-                                <td style="width:15%;text-align:right"></td>
-                                <td style="width:10%;text-align:right">AED</td>
-                                <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $grand_tot); ?></td>
-                            </tr>
                         </table>
+                        <table class="description-tbl" style="margin-bottom: 10px;">
+                            <thead>
+                                <tr>
+                                    <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 12px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>
+                                    <td style="width:15%;text-align:right;"></td>
+                                    <td style="width:10%;text-align:right;color: #fff;font-size: 12px;">AED</td>
+                                    <td style="width:15%;text-align:right;color: #fff;font-size: 12px;"><?= sprintf('%0.2f', $grand_tot); ?></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="terms-condition">
+                        <h5>Terms & Conditions</h5>
+                        <ol>
+                            <li>Payment should settle within 7 days of invoice date.</li>
+                            <li>If you have any questions about this invoice, please contact through acc@emperorline.com</li>
+                            <li>Please transfer the funds to our below account</li>
+                        </ol>
                     </div>
                 </td>
             </tr>

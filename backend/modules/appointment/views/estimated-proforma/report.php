@@ -225,10 +225,16 @@ $currency = Currency::findOne(1);
                         <div class="main-left">
                             <table class="tb2">
                                 <tr>
-                                    <td style="width: 55px;"><strong>TO </strong></td> <td style="width: 40px;text-align: center">:</td>
+                                    <td><strong>TO </strong></td>
+                                    <td style="width: 40px;text-align: center">:</td>
                                     <td style="max-width: 250px">
-                                        <strong><span style="font-weight:600;"><?= $princip != '' ? common\models\Debtor::findOne($princip)->principal_name : '' ?></span><br/>
-                                        <?= $appointment->getEpdaAddress($princip); ?><br/></strong>
+                                        <span style="font-weight:600;"><?= $princip != '' ? common\models\Debtor::findOne($princip)->principal_name : '' ?></span><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 55px;"></td> <td style="width: 40px;text-align: center"></td>
+                                    <td style="max-width: 250px">
+                                        <strong><?= $appointment->getEpdaAddress($princip); ?><br/></strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -371,20 +377,20 @@ $currency = Currency::findOne(1);
                                             foreach ($subcategories as $subcategory) {
                                                 ?>
                                                 <tr>
-                                                    <td style="width: 26%;"><?= $subcategory->sub->sub_service ?></td>
-                                                    <td style="width: 26%;"><?= $subcategory->rate_to_category ?></td>
+                                                    <td style="width: 26%;text-align: left;"><?= $subcategory->sub->sub_service ?></td>
+                                                    <td style="width: 26%;text-align: left;"><?= $subcategory->rate_to_category ?></td>
                                                     <td style="width: 8%;"><?= $subcategory->unit ?></td>
-                                                    <td style="width: 12%;"><?= $subcategory->comments ?></td>
-                                                    <td style="width: 8%;">
+                                                    <td style="width: 12%;text-align: left;"><?= $subcategory->comments ?></td>
+                                                    <td style="width: 8%;text-align: right;">
                                                         <?php
                                                         if ($appointment->currency == 1) {
                                                             echo Yii::$app->SetValues->NumberFormat($subcategory->unit_price);
                                                         } else {
-                                                                echo Yii::$app->SetValues->NumberFormat($subcategory->unit_price);
+                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->unit_price);
                                                         }
                                                         ?>
                                                     </td>
-                                                    <td style="width: 10%;">
+                                                    <td style="width: 10%;text-align: right;">
                                                         <?php
                                                         if ($appointment->currency == 1) {
                                                             echo Yii::$app->SetValues->NumberFormat($subcategory->tax_amount);
@@ -393,7 +399,7 @@ $currency = Currency::findOne(1);
                                                         }
                                                         ?>
                                                     </td>
-                                                    <td style="width: 10%;font-weight: bold;">
+                                                    <td style="width: 10%;font-weight: bold;text-align: right;">
                                                         <?php
                                                         if ($appointment->currency == 1) {
                                                             echo Yii::$app->SetValues->NumberFormat($subcategory->total);
@@ -415,11 +421,11 @@ $currency = Currency::findOne(1);
                                             ?>
 
                                             <tr>
-                                                <td style="width: 26%;"><?= $estimate->service->service ?></td>
-                                                <td style="width: 26%;"><?= $estimate->rate_to_category ?></td>
+                                                <td style="width: 26%;text-align: left;"><?= $estimate->service->service ?></td>
+                                                <td style="width: 26%;text-align: left;"><?= $estimate->rate_to_category ?></td>
                                                 <td style="width: 8%;"><?= $estimate->unit ?></td>
-                                                <td style="width: 12%;"><?= $estimate->comments ?></td>
-                                                <td style="width: 8%;">
+                                                <td style="width: 12%;text-align: left;"><?= $estimate->comments ?></td>
+                                                <td style="width: 8%;text-align: right;">
                                                     <?php
                                                     if ($appointment->currency == 1) {
 
@@ -429,7 +435,7 @@ $currency = Currency::findOne(1);
                                                     }
                                                     ?>
                                                 </td>
-                                                <td style="width: 10%;">
+                                                <td style="width: 10%;text-align: right;">
                                                     <?php
                                                     if ($appointment->currency == 1) {
                                                         echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
@@ -438,7 +444,7 @@ $currency = Currency::findOne(1);
                                                     }
                                                     ?>
                                                 </td>
-                                                <td style="width: 10%;font-weight: bold;">
+                                                <td style="width: 10%;font-weight: bold;text-align: right;">
                                                     <?php
                                                     if ($appointment->currency == 1) {
                                                         echo Yii::$app->SetValues->NumberFormat($estimate->epda);
@@ -460,12 +466,12 @@ $currency = Currency::findOne(1);
                                     ?>
                                     <tr>
                                         <td colspan="5" rowspan="2" style="text-align: center;font-weight: bold;">Sub total:</td>
-                                        <td style="width: 10%;font-weight: bold;">
+                                        <td style="width: 10%;font-weight: bold;text-align: right;">
                                             <?php
                                             echo Yii::$app->SetValues->NumberFormat($tax_sub_total);
                                             ?>
                                         </td>
-                                        <td style="font-weight: bold;">
+                                        <td style="font-weight: bold;text-align: right;">
                                             <?php
                                             echo Yii::$app->SetValues->NumberFormat($subtotal);
                                             ?>
@@ -483,23 +489,28 @@ $currency = Currency::findOne(1);
                     <div class="grandtotal">
                         <table class="tbl">
                             <tr>
-                                <?php
-                                $usd = round(($grandtotal + $grand_taxtotal) * $currency->currency_value, 3);
-                                ?>
                                 <td style="width: 80%; text-align: center;" rowspan=""><b>Grand Total Estimate</b></td>
-                                <?php if ($appointment->currency == 1) { ?>
-                                    <td style="width: 10%;font-weight: bold;">
+                                <?php if ($appointment->currency == 0) { ?>
+                                    <td style="width: 10%;font-weight: bold;text-align: right;">
                                         AED : <?= Yii::$app->SetValues->NumberFormat($grandtotal + $grand_taxtotal); ?>
                                     </td>
-                                    <td style="width: 10%;font-weight: bold;">
+                                    <?php
+                                    $usd = round(($grandtotal + $grand_taxtotal) * $currency->currency_value, 3);
+                                    ?>
+                                    <td style="width: 10%;font-weight: bold;text-align: right;">
                                         USD : <?= Yii::$app->SetValues->NumberFormat($usd) ?>
                                     </td>
-                                <?php } else { ?>
-                                    <td style="width: 10%;font-weight: bold;">
-                                        USD : <?= Yii::$app->SetValues->NumberFormat($usd) ?>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td style="width: 10%;font-weight: bold;text-align: right;">
+                                        USD : <?= Yii::$app->SetValues->NumberFormat($grandtotal + $grand_taxtotal); ?>
                                     </td>
-                                    <td style="width: 10%;font-weight: bold;">
-                                        AED : <?= Yii::$app->SetValues->NumberFormat($grandtotal + $grand_taxtotal); ?>
+                                    <?php
+                                    $aed = round(($grandtotal + $grand_taxtotal) / $currency->currency_value, 3);
+                                    ?>
+                                    <td style="width: 10%;font-weight: bold;text-align: right;">
+                                        AED : <?= Yii::$app->SetValues->NumberFormat($aed); ?>
                                     </td>
                                 <?php }
                                 ?>

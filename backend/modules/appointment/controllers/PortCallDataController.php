@@ -133,7 +133,7 @@ class PortCallDataController extends Controller {
        if(!empty($model)){
             $model = Yii::$app->ChangeDateFormate->DateFormat($model, $model->attributes);
         }
-        $this->AddStages($model, $model_appointment);
+        
         if ($model_port_cargo_details == '')
             $model_port_cargo_details = new PortCargoDetails;
 
@@ -173,6 +173,7 @@ class PortCallDataController extends Controller {
             $port_stoppages->stoppage_from = Yii::$app->ChangeDateFormate->SingleDateFormat($port_stoppages->stoppage_from);
             $port_stoppages->stoppage_to = Yii::$app->ChangeDateFormate->SingleDateFormat($port_stoppages->stoppage_to);
         }
+        $this->AddStages($model, $model_appointment);
         return $this->render('update', [
                     'model' => $model,
                     'model_draft' => $model_draft,

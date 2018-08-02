@@ -132,6 +132,8 @@ class CloseEstimateController extends Controller {
                 $tax_rate = TaxMaster::findOne($model->tax_id)->value;
                 if ($tax_rate > 0) {
                     $model->tax_amount = ($tax_rate / 100) * $model->fda;
+                } else {
+                    $model->tax_amount = 0;
                 }
             }
             if ($model->save()) {
@@ -186,6 +188,7 @@ class CloseEstimateController extends Controller {
             $model->unit_rate = $estimate->unit_rate;
             $model->unit = $estimate->unit;
             $model->epda = $estimate->epda;
+            $model->tax_id = $estimate->tax_id;
             $model->tax_amount = $estimate->tax_amount;
             $model->principal = $estimate->principal;
             $model->invoice_type = $estimate->invoice_type;
@@ -363,7 +366,7 @@ class CloseEstimateController extends Controller {
 
     public function actionReport() {
         empty(Yii::$app->session['fda-report']);
-//                $invoice_type = $_POST['invoice_type'];
+        $invoice_num = $_POST['invoice_num'];
         $app = $_POST['app_id'];
         $principp = $_POST['fda'];
         $invoice_date = Yii::$app->ChangeDateFormate->SingleDateFormat($_POST['invoice_date']);
@@ -378,6 +381,7 @@ class CloseEstimateController extends Controller {
             'ports' => $ports,
             'principp' => $principp,
             'invoice_date' => $invoice_date,
+            'invoice_num' => $invoice_num,
             'save' => true,
             'print' => false,
         ]);
@@ -388,6 +392,7 @@ class CloseEstimateController extends Controller {
                     'ports' => $ports,
                     'principp' => $principp,
                     'invoice_date' => $invoice_date,
+                    'invoice_num' => $invoice_num,
                     'save' => false,
                     'print' => true,
         ]));
@@ -399,8 +404,8 @@ class CloseEstimateController extends Controller {
      * return to the close-estimate 'add' view page
      */
 
-    public function actionSaveAllReport($appintment_id, $principal_id, $est_id) {
-        $model_report = $this->InvoiceGeneration($appintment_id, $principal_id, $est_id);
+    public function actionSaveAllReport($appintment_id, $principal_id, $est_id, $invoice_num) {
+        $model_report = $this->InvoiceGeneration($appintment_id, $principal_id, $est_id, $invoice_num);
         Yii::$app->SetValues->Attributes($model_report);
         if ($model_report->save(false)) {
             $this->UpdateFundAllocation($appintment_id, $principal_id);
@@ -437,7 +442,7 @@ class CloseEstimateController extends Controller {
      * return model
      */
 
-    public function InvoiceGeneration($appintment_id, $principal_id, $est_id) {
+    public function InvoiceGeneration($appintment_id, $principal_id, $est_id, $invoice_num) {
         $appointment = Appointment::findOne($appintment_id);
         $last_data = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['principal_id' => $principal_id])->one();
         $last_report_saved = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appintment_id, 'principal_id' => $principal_id])->one();
@@ -449,12 +454,11 @@ class CloseEstimateController extends Controller {
         }
         $new_port_code = substr($port_code, -3);
         $app_no = ltrim(substr($appointment->appointment_no, -4), '0');
-        $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id . '-' . date("y");
         $model_report = new FdaReport();
         $model_report->appointment_id = $appintment_id;
         $model_report->estimate_id = $est_id;
         $model_report->principal_id = $principal_id;
-        $model_report->invoice_number = $invoice_number;
+        $model_report->invoice_number = $invoice_num;
         $model_report->report = Yii::$app->session['fda-report'];
         if (empty($last_data)) {
             $model_report->sub_invoice = 124;
