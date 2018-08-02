@@ -203,7 +203,7 @@
                                     <p>#215, AL AHBABI BLD 2, 2ND FLOOR</p>
                                     <p>NEAR DUBAI GRAND HOTEL, AL QUASIS</p>
                                     <p>P.O.BOX - 233797,&nbsp;DUBAI, UAE</p>
-                                    <p><strong>TRN : 457567</strong></p>
+                                    <p><strong>TRN : 100315372100003</strong></p>
                                 </div>
                             </div>
                             <div class="box-right">
