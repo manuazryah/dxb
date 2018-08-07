@@ -44,10 +44,6 @@ $this->params['breadcrumbs'][] = 'Update';
                         ?>
                     </div>
                 </div>
-                <div class="saved-report">
-                    <h5 style="text-decoration: underline;text-decoration: underline;color: #2e5da7;font-size: 16px;font-weight: 600;">Saved Logistics Report</h5>
-                    <a href="<?= Yii::$app->homeUrl ?>logistics/logistics/show-report?id=<?= $model->id ?>" target="_blank','width=750, height=500');return false;"><?= $model->invoice_no ?></a>
-                </div>
             </div>
         </div>
     </div>

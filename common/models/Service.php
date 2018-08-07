@@ -16,34 +16,31 @@ use Yii;
  * @property string $DOC
  * @property string $DOU
  */
-class Service extends \yii\db\ActiveRecord
-{
+class Service extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'service';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['status', 'CB', 'UB'], 'integer'],
-            [['unit_price','service_name'], 'required'],
-            [['unit_price'], 'number'],
-            [['service_name', 'DOC', 'DOU'], 'safe'],
+                [['status', 'CB', 'UB', 'set_as_default'], 'integer'],
+                [['unit_price', 'service_name'], 'required'],
+                [['unit_price'], 'number'],
+                [['service_name', 'DOC', 'DOU'], 'safe'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'service_name' => 'Service Name',
@@ -55,4 +52,5 @@ class Service extends \yii\db\ActiveRecord
             'DOU' => 'Dou',
         ];
     }
+
 }

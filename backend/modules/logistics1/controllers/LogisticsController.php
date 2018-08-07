@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
  */
 class LogisticsController extends Controller {
 
-    public function beforeAction($action) {
+public function beforeAction($action) {
         if (!parent::beforeAction($action)) {
             return false;
         }
@@ -119,36 +119,12 @@ class LogisticsController extends Controller {
         }
         $services = \common\models\LogisticsService::findAll(['logistics_id' => $id]);
         $logistics = Logistics::findOne(['id' => $id]);
-        if (empty($services)) {
-            $this->setServices($id);
-            $services = \common\models\LogisticsService::findAll(['logistics_id' => $id]);
-        }
         return $this->render('add', [
                     'model' => $model,
                     'services' => $services,
                     'id' => $id,
                     'logistics' => $logistics,
         ]);
-    }
-
-    public function setServices($id) {
-        $default_services = \common\models\Service::find()->where(['status' => 1, 'set_as_default' => 1])->all();
-        if (!empty($default_services)) {
-            foreach ($default_services as $default_service) {
-                if (!empty($default_service)) {
-                    $model = new \common\models\LogisticsService();
-                    $model->service = $default_service->id;
-                    $model->logistics_id = $id;
-                    $model->unit_price = $default_service->unit_price;
-                    $model->qty = 1;
-                    $model->taxable_value = $default_service->unit_price;
-                    $model->total = $default_service->unit_price;
-                    Yii::$app->SetValues->Attributes($model);
-                    $model->save();
-                }
-            }
-        }
-        return;
     }
 
     /**
@@ -175,19 +151,7 @@ class LogisticsController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $services = \common\models\LogisticsService::find()->where(['logistics_id' => $id])->all();
-        if (!empty($services)) {
-            foreach ($services as $service) {
-                $service->delete();
-            }
-        }
-        try {
-            if ($this->findModel($id)->delete()) {
-                Yii::$app->session->setFlash('success', "Brand removed Successfully");
-            }
-        } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', "Can't delete. Because this brand is used in another functions.");
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -248,47 +212,16 @@ class LogisticsController extends Controller {
             return $res;
         }
     }
-
+    
     /*
      * This function generate logistic report
      */
-
     public function actionReports($id) {
         $logistics = Logistics::findOne($id);
-        $logistic_services = \common\models\LogisticsService::find()->where(['logistics_id' => $id])->all();
-        Yii::$app->session->set('logistics', $this->renderPartial('reports', [
-                    'logistics' => $logistics,
-                    'logistic_services' => $logistic_services,
-                    'save' => false,
-                    'print' => true,
-        ]));
-        echo $this->renderPartial('reports', [
-            'logistics' => $logistics,
-            'logistic_services' => $logistic_services,
-            'save' => true,
-            'print' => false,
-        ]);
-        exit;
-    }
-
-    /*
-     * This function save the generate Logistics report
-     */
-
-    public function actionSaveReport($id) {
-        $logistics = Logistics::findOne($id);
-        if (!empty($logistics)) {
-            $logistics->reports = Yii::$app->session['logistics'];
-            $logistics->save();
-        }
-        echo "<script>window.close();</script>";
-        exit;
-    }
-
-    public function actionShowReport($id) {
-        $model_report = Logistics::findOne($id);
-        return $this->renderPartial('_old', [
-                    'model_report' => $model_report,
+        $logistic_services = \common\models\LogisticsService::find()->where(['logistics_id'=>$id])->all();
+        return $this->renderPartial('reports', [
+            'logistics'=>$logistics,
+            'logistic_services'=>$logistic_services,
         ]);
     }
 

@@ -63,9 +63,6 @@ use yii\helpers\ArrayHelper;
             <?= $form->field($model, 'remarks')->textInput() ?>
         </div>
         <div class="col-md-4 pad-left-15">
-            <?= $form->field($model, 'currency')->dropDownList(ArrayHelper::map(common\models\Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['class' => 'form-control']) ?>
-        </div>
-        <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
         </div>
     </div>

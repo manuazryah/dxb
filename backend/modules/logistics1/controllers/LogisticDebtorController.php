@@ -110,13 +110,7 @@ class LogisticDebtorController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        try {
-            if ($this->findModel($id)->delete()) {
-                Yii::$app->session->setFlash('success', "Removed Successfully");
-            }
-        } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', "Can't delete.");
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

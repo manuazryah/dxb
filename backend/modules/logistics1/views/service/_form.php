@@ -13,18 +13,13 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-4 pad-left-15">
-            <?= $form->field($model, 'service_name')->textInput() ?>
+           <?= $form->field($model, 'service_name')->textInput() ?>
         </div>
         <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'unit_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 pad-left-15">
-            <?= $form->field($model, 'set_as_default')->checkbox(); ?>
         </div>
     </div>
 

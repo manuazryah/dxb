@@ -3,18 +3,18 @@
 namespace backend\modules\logistics\controllers;
 
 use Yii;
-use common\models\LogisticDebtor;
-use common\models\LogisticDebtorSearch;
+use common\models\Service;
+use common\models\ServiceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LogisticDebtorController implements the CRUD actions for LogisticDebtor model.
+ * ServiceController implements the CRUD actions for Service model.
  */
-class LogisticDebtorController extends Controller {
+class ServiceController extends Controller {
 
-    public function beforeAction($action) {
+public function beforeAction($action) {
         if (!parent::beforeAction($action)) {
             return false;
         }
@@ -45,11 +45,11 @@ class LogisticDebtorController extends Controller {
     }
 
     /**
-     * Lists all LogisticDebtor models.
+     * Lists all Service models.
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new LogisticDebtorSearch();
+        $searchModel = new ServiceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -59,7 +59,7 @@ class LogisticDebtorController extends Controller {
     }
 
     /**
-     * Displays a single LogisticDebtor model.
+     * Displays a single Service model.
      * @param integer $id
      * @return mixed
      */
@@ -70,24 +70,23 @@ class LogisticDebtorController extends Controller {
     }
 
     /**
-     * Creates a new LogisticDebtor model.
+     * Creates a new Service model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
-        $model = new LogisticDebtor();
+        $model = new Service();
 
         if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', 'New Debtor Added Successfully');
+            Yii::$app->getSession()->setFlash('success', 'New Service Created Successfully');
             return $this->redirect(['view', 'id' => $model->id]);
-        }
-        return $this->render('create', [
+        } return $this->render('create', [
                     'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing LogisticDebtor model.
+     * Updates an existing Service model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,40 +95,34 @@ class LogisticDebtorController extends Controller {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', 'Debtor Updated Successfully');
-            return $this->redirect(['update', 'id' => $model->id]);
+            Yii::$app->getSession()->setFlash('success', 'Service Updated Successfully');
+            return $this->redirect(['view', 'id' => $model->id]);
         } return $this->render('update', [
                     'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing LogisticDebtor model.
+     * Deletes an existing Service model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id) {
-        try {
-            if ($this->findModel($id)->delete()) {
-                Yii::$app->session->setFlash('success', "Removed Successfully");
-            }
-        } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', "Can't delete.");
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the LogisticDebtor model based on its primary key value.
+     * Finds the Service model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return LogisticDebtor the loaded model
+     * @return Service the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = LogisticDebtor::findOne($id)) !== null) {
+        if (($model = Service::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

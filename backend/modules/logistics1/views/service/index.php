@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\LogisticsSearch */
+/* @var $searchModel common\models\ServiceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Logistics';
+$this->title = 'Services';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="logistics-index">
+<div class="service-index">
 
     <div class="row">
         <div class="col-md-12">
@@ -23,34 +23,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="panel-body">
                     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                    <?= Html::a('<i class="fa-th-list"></i><span> Create Logistics</span>', ['create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                    <?= Html::a('<i class="fa-th-list"></i><span> Create Service</span>', ['create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
                     <?=
                     GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                            ['class' => 'yii\grid\SerialColumn'],
 //                                                            'id',
-                            'invoice_no',
-                            'invoice_date',
-                            // 'debtor',
-                            // 'purpose_of_visit:ntext',
-                            'voyage',
-                            'vessel',
-                            'port',
-                            // 'cargo',
-                            // 'job_ref',
-                            // 'GRT',
-                            // 'LOA',
-                            // 'remarks:ntext',
-                            // 'status',
-                            // 'CB',
+                            'service_name',
+                            'unit_price',
+                            [
+                                'attribute' => 'status',
+                                'format' => 'raw',
+                                'filter' => [1 => 'Enabled', 0 => 'disabled'],
+                                'value' => function ($model) {
+                                    return $model->status == 1 ? 'Enabled' : 'disabled';
+                                },
+                            ],
                             // 'UB',
                             // 'DOC',
                             // 'DOU',
-                            ['class' => 'yii\grid\ActionColumn',
-                                'template' => '{update}{delete}'
-                            ],
+                            ['class' => 'yii\grid\ActionColumn'],
                         ],
                     ]);
                     ?>

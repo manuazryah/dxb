@@ -14,6 +14,22 @@ use yii\filters\VerbFilter;
  */
 class ServiceController extends Controller {
 
+    public function beforeAction($action) {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        if (Yii::$app->user->isGuest) {
+            $this->redirect(['/site/index']);
+            return false;
+        }
+        if (Yii::$app->session['post']['logistics'] != 1) {
+            Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+            $this->redirect(['/site/exception']);
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @inheritdoc
      */
@@ -80,7 +96,7 @@ class ServiceController extends Controller {
 
         if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', 'Service Updated Successfully');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
         } return $this->render('update', [
                     'model' => $model,
         ]);
@@ -93,7 +109,13 @@ class ServiceController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+        try {
+            if ($this->findModel($id)->delete()) {
+                Yii::$app->session->setFlash('success', "Removed Successfully");
+            }
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', "Can't delete.");
+        }
 
         return $this->redirect(['index']);
     }

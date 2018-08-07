@@ -54,11 +54,10 @@
             padding: 0px 10px;
         }
         .address-box p{
-            font-size: 6px;
-            line-height: .8;
+            font-size: 10px;
         }
         .address-box strong{
-            font-size: 6px;
+            font-size: 11px;
             font-weight: 600;
         }
         .box-1{
@@ -72,12 +71,12 @@
         .box-right-label{
             background: #484646;
             color: white;
-            padding: 5px 0px;
-            font-size: 6px;
+            padding: 12px 0px;
+            font-size: 11px;
         }
         .box-right-content{
-            padding: 5px 0px;
-            font-size: 6px;
+            padding: 8px 0px;
+            font-size: 11px;
         }
         .box-left-1{
             width: 50%;
@@ -98,23 +97,23 @@
             text-align: left;
         }
         .description-tbl th{
-            font-size: 6px;
+            font-size: 14px;
             color: white;
         }
         .description-tb2{
             width: 100%;
-            text-align: left;
-            font-size: 6px;
+            text-align: left;  
+            font-size: 13px;
         }
         .description-tb3{
             width: 100%;
-            text-align: left;
+            text-align: left;  
             border-top: 1px solid #aba5a5;
             padding: 7px 0px;
-            font-size: 6px;
+            font-size: 13px;
         }
         .description-tb3 td{
-            line-height: 15px;
+            line-height: 25px;
         }
         .heading-bank{
             background: #484646;
@@ -122,30 +121,29 @@
             color: white;
             text-align: center;
             margin: 20px 0px;
-            font-size: 6px;
         }
         .bank-content{
             text-align: center;
         }
         .bank-content p{
-            font-size: 6px;
+            font-size: 12px;
         }
         .note{
             text-align: center;
             margin: 20px 0px;
         }
         .note p{
-            font-size: 6px;
+            font-size: 14px;
         }
         .note p>strong{
-            font-size: 6px;
+            font-size: 13px;
         }
         .footer-text{
             text-align: center;
             border-top: 1px solid #b7b5b5;
         }
         .footer-text p{
-            font-size: 6px;
+            font-size: 11px;
             line-height: 2px;
         }
         .address-box-to {
@@ -153,32 +151,41 @@
             width: 50%;
         }
         .address-box-to strong {
-            font-size: 6px;
+            font-size: 11px;
             font-weight: 600;
         }
         .address-box-to p {
-            font-size: 6px;
+            font-size: 10px;
+            line-height: 20px;
             font-weight: 400;
             text-transform: uppercase;
-            line-height: 1.8;
-        }
-        .terms-condition{
-            padding: 0px 10px;
-        }
-        .terms-condition h5{
-            margin-bottom: 0px;
-            font-size: 6px;
-        }
-        .terms-condition ol{
-            padding-left: 15px;
-            margin-top: 15px;
-            margin-bottom: 0px;
         }
         .terms-condition ol>li{
-            font-size: 6px;
+            font-size: 13px;
         }
     </style>
     <table border ="0"  class="main-tabl" border="0">
+        <thead>
+            <tr>
+                <th style="width:100%">
+                    <div class="header">
+                        <div class="main-left">
+                            <?php
+                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
+                            echo $img;
+                            ?>
+                        </div>
+                        <div class="main-right">
+                            <?php
+                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
+                            echo $img;
+                            ?>
+                        </div>
+                        <br/>
+                    </div>
+                </th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
                 <td>
@@ -320,7 +327,7 @@
                             <tr>
                                 <td colspan="4" style="width:60%;text-align:right">TOTAL BEFORE TAX</td>
                                 <td style="width:15%;text-align:right"></td>
-                                <td style="width:10%;text-align:right"><?= $logistics->currency == 1 ? 'USD' : 'AED' ?></td>
+                                <td style="width:10%;text-align:right">AED</td>
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $amount_tot); ?></td>
                             </tr>
                             <tr>
@@ -333,10 +340,10 @@
                         <table class="description-tbl" style="margin-bottom: 10px;">
                             <thead>
                                 <tr>
-                                    <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 6px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>
+                                    <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 12px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>
                                     <td style="width:15%;text-align:right;"></td>
-                                    <td style="width:10%;text-align:right;color: #fff;font-size: 6px;"><?= $logistics->currency == 1 ? 'USD' : 'AED' ?></td>
-                                    <td style="width:15%;text-align:right;color: #fff;font-size: 6px;"><?= sprintf('%0.2f', $grand_tot); ?></td>
+                                    <td style="width:10%;text-align:right;color: #fff;font-size: 12px;">AED</td>
+                                    <td style="width:15%;text-align:right;color: #fff;font-size: 12px;"><?= sprintf('%0.2f', $grand_tot); ?></td>
                                 </tr>
                             </thead>
                         </table>
@@ -353,6 +360,10 @@
                             <li>Please transfer the funds to our below account</li>
                         </ol>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <div class="heading-bank">Bank Account Details</div>
                     <div class="bank-content">
                         <p>Beneficiary: EMPEROR SHIPPING LINES L.L.C, P.O.BOX:233797, AL QUSAIS, DUBAI, U.A.E</p>
@@ -390,23 +401,9 @@
         document.body.innerHTML = restorepage;
     }
 </script>
-<div style="display:inline-block">
-    <div class="print" style="float:left;">
-        <?php
-        if ($print) {
-            ?>
-            <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
-            <?php
-        }
-        ?>
+<div class="print">
+    <div class="print" style="margin: 30px 0px;text-align: center;">
+        <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
         <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
-        <?php
-        if ($save) {
-            ?>
-            <a href="<?= Yii::$app->homeUrl ?>logistics/logistics/save-report?id=<?= $logistics->id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
-            <?php
-        }
-        ?>
     </div>
-    <?php ?>
 </div>

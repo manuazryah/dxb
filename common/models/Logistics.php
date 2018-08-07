@@ -31,36 +31,33 @@ use Yii;
  * @property LogisticDebtor $debtor0
  * @property LogisticsService[] $logisticsServices
  */
-class Logistics extends \yii\db\ActiveRecord
-{
+class Logistics extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'logistics';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['invoice_date', 'eta', 'etd', 'DOC', 'DOU'], 'safe'],
-            [['invoice_date', 'invoice_no','debtor'], 'required'],
-            [['debtor', 'status', 'CB', 'UB'], 'integer'],
-            [['purpose_of_visit', 'remarks'], 'string'],
-            [['invoice_no', 'voyage', 'vessel', 'port', 'cargo', 'job_ref', 'GRT', 'LOA'], 'string', 'max' => 100],
-            [['debtor'], 'exist', 'skipOnError' => true, 'targetClass' => LogisticDebtor::className(), 'targetAttribute' => ['debtor' => 'id']],
+                [['invoice_date', 'eta', 'etd', 'DOC', 'DOU', 'reports'], 'safe'],
+                [['invoice_date', 'invoice_no', 'debtor'], 'required'],
+                [['debtor', 'status', 'CB', 'UB', 'currency'], 'integer'],
+                [['purpose_of_visit', 'remarks'], 'string'],
+                [['invoice_no', 'voyage', 'vessel', 'port', 'cargo', 'job_ref', 'GRT', 'LOA'], 'string', 'max' => 100],
+                [['debtor'], 'exist', 'skipOnError' => true, 'targetClass' => LogisticDebtor::className(), 'targetAttribute' => ['debtor' => 'id']],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'invoice_no' => 'Invoice No',
@@ -88,16 +85,15 @@ class Logistics extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDebtor0()
-    {
+    public function getDebtor0() {
         return $this->hasOne(LogisticDebtor::className(), ['id' => 'debtor']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLogisticsServices()
-    {
+    public function getLogisticsServices() {
         return $this->hasMany(LogisticsService::className(), ['logistics_id' => 'id']);
     }
+
 }

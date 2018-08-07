@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Service */
+/* @var $model common\models\LogisticDebtor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="service-form form-inline">
+<div class="logistic-debtor-form form-inline">
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-4 pad-left-15">
-            <?= $form->field($model, 'service_name')->textInput() ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-4 pad-left-15">
-            <?= $form->field($model, 'unit_price')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'trn_no')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
@@ -24,7 +24,7 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="row">
         <div class="col-md-12 pad-left-15">
-            <?= $form->field($model, 'set_as_default')->checkbox(); ?>
+            <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
         </div>
     </div>
 
