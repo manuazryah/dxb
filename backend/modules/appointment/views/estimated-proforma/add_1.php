@@ -140,9 +140,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <th data-priority="3">SUPPLIER</th>
     <!--                                                                <th data-priority="3">CURRENCY</th>-->
                                     <th data-priority="1">RATE /QTY</th>
-                                    <th data-priority="3">QTY</th>
+                                    <th data-priority="3">QUANTITY</th>
     <!--                                                                <th data-priority="6">ROE</th>-->
                                     <th data-priority="6" >EPDA VALUE</th>
+                                    <th data-priority="6" >TAX AMOUNT</th>
                                     <th data-priority="6">PRINCIPAL</th>
                                     <th data-priority="6">RATE TO CATEGORY</th>
                                     <th data-priority="6">COMMENTS</th>
@@ -162,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= $i; ?></td>
                                         <td class="" drop_id="estimatedproforma-service_id" id="<?= $estimate->id ?>-service_id" val="<?= $estimate->service_id ?>"><?= $estimate->service->service ?></td>
                                         <td class="" drop_id="estimatedproforma-supplier" id="<?= $estimate->id ?>-supplier" val="<?= $estimate->supplier ?>"><?php if ($estimate->supplier != '') { ?> <?= $estimate->supplier0->name ?><?php } ?></td>
-                                        <td class="edit_text" id="<?= $estimate->id ?>-unit_rate"  val="<?= $estimate->unit_rate ?>">
+                                        <td class="edit_text" id="<?= $estimate->id ?>-unit_rate"  val="<?= $estimate->unit_rate ?>" data-service="<?= $estimate->service_id ?>">
                                             <?php
                                             if ($estimate->unit_rate == '') {
                                                 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -171,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                             ?>
                                         </td>
-                                        <td class="edit_text" id="<?= $estimate->id ?>-unit" val="<?= $estimate->unit ?>">
+                                        <td class="edit_text" id="<?= $estimate->id ?>-unit" val="<?= $estimate->unit ?>" data-service="<?= $estimate->service_id ?>">
                                             <?php
                                             if ($estimate->unit == '') {
                                                 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -180,12 +181,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                             ?>
                                         </td>
-                                        <td class="edit_text" id="<?= $estimate->id ?>-epda" val="<?= $estimate->epda ?>">
+                                        <td class="edit_text" id="<?= $estimate->id ?>-epda" val="<?= $estimate->epda ?>" data-service="<?= $estimate->service_id ?>">
                                             <?php
                                             if ($estimate->epda == '') {
                                                 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                             } else {
                                                 echo Yii::$app->SetValues->NumberFormat($estimate->epda);
+                                            }
+                                            ?>
+                                        </td>
+                                        <td id="<?= $estimate->id ?>-tax_amount">
+                                            <?php
+                                            if ($estimate->tax_amount == '') {
+                                                echo Yii::$app->SetValues->NumberFormat(0);
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
                                             }
                                             ?>
                                         </td>
@@ -224,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                             ?>
                                         </td>
-                                        <!--<td><?php // $estimate->images;                                                                                                                                                                                    ?></td>-->
+                                        <!--<td><?php // $estimate->images;                                                                                                                                                                                                                                        ?></td>-->
                                         <td>
                                             <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
                                             <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -254,11 +264,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                                                                                                                                      ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
-                                    <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                                                                                                                                                                      ?></td>-->
+                                    <td><?= $form->field($model, 'unit')->textInput(['type' => 'number', 'min' => 0, 'placeholder' => 'Quantity', 'step' => '0.01'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
+                                    <td>
+                                        <?php
+                                        $taxes = ArrayHelper::map(\common\models\TaxMaster::find()->where(['status' => 1])->all(), 'id', function($data) {
+                                                    return $data->name . ' - ' . $data['value'] . '%';
+                                                }
+                                        );
+                                        ?>
+                                        <?= $form->field($model, 'tax_id')->dropDownList($taxes, ['prompt' => '-Tax-'])->label(false) ?>
+                                    </td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
                                     if (count($arr1) == 1) {
@@ -282,7 +299,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                                                                                                                                                    ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                                                                                                                                                                                                        ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -326,11 +343,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 data: {service_id: service_id},
                                 url: '<?= Yii::$app->homeUrl; ?>appointment/estimated-proforma/supplier',
                                 success: function (data) {
-                                    if (data != '') {
-                                        $("#estimatedproforma-supplier").html(data);
+                                    var res = $.parseJSON(data);
+                                    if (res.result['supplier'] != '') {
+                                        $("#estimatedproforma-supplier").html(res.result['supplier']);
                                     } else {
                                         $("#estimatedproforma-supplier").prop('disabled', true);
                                     }
+                                    $("#tax_percentage").val(res.result['tax']);
                                 }
                             });
                         });
@@ -423,7 +442,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="row" style="width: 200px;display: inline-block;margin: 0px;">
                                     <div class="upload_file_list" style="float:left;height: 55px;">
                                         <div>
-                                            <!--<span class=""><?php // echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('/appointment/estimated-proforma/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';                ?></span>-->
+                                            <!--<span class=""><?php // echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('/appointment/estimated-proforma/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';                                                                    ?></span>-->
                                             <span class=""><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report', 'id' => $estmate_report->id], ['target' => "_blank','width=750, height=500');return false;"]) . '&nbsp;&nbsp;'; ?></span>
                                         </div>
                                         <div style="color:#6b6969;">
@@ -545,13 +564,14 @@ $this->params['breadcrumbs'][] = $this->title;
             $('.edit_text').on('dblclick', function () {
 
                 var val = $(this).attr('val');
+                var service = $(this).attr('data-service');
                 var idd = this.id;
                 var res_data = idd.split("-");
                 if (res_data[1] == 'comments' || res_data[1] == 'rate_to_category') {
                     $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
 
                 } else {
-                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '" service-id="' + service + '"/>');
 
                 }
 
@@ -563,14 +583,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 var update = thiss.attr('update');
                 var res_id = data_id.split("-");
                 var res_val = $(this).val();
+                var service_id = $(this).attr('service-id');
                 $.ajax({
                     type: 'POST',
                     cache: false,
-                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                    data: {id: res_id[0], name: res_id[1], valuee: res_val, service: service_id},
                     url: '<?= Yii::$app->homeUrl; ?>appointment/estimated-proforma/edit-estimate',
                     success: function (data) {
                         if (data == '') {
                             data = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                        } else {
+                            $("#" + res_id[0] + "-tax_amount").text(data);
                         }
                         thiss.html(res_val);
                         location.reload();

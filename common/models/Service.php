@@ -30,10 +30,10 @@ class Service extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['status', 'CB', 'UB', 'set_as_default'], 'integer'],
-                [['unit_price', 'service_name'], 'required'],
-                [['unit_price'], 'number'],
-                [['service_name', 'DOC', 'DOU'], 'safe'],
+            [['status', 'CB', 'UB', 'set_as_default', 'vat'], 'integer'],
+            [['unit_price', 'service_name'], 'required'],
+            [['unit_price', 'usd_amount'], 'number'],
+            [['service_name', 'DOC', 'DOU', 'category'], 'safe'],
         ];
     }
 
@@ -44,7 +44,10 @@ class Service extends \yii\db\ActiveRecord {
         return [
             'id' => 'ID',
             'service_name' => 'Service Name',
-            'unit_price' => 'Unit Price',
+            'unit_price' => 'AED Price',
+            'usd_amount' => 'USD Price',
+            'category' => 'Category',
+            'vat' => 'VAT',
             'status' => 'Status',
             'CB' => 'Cb',
             'UB' => 'Ub',

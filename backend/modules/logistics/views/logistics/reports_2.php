@@ -33,12 +33,11 @@
             padding: 13px 0px;
             font-size: 20px;
             font-weight: 600;
-            padding-top: 0px;
         }
         .header-box{
             width: 100%;
             /*border: 1px solid #aba5a5;*/
-            margin-bottom: 8px;
+            margin-bottom: 30px;
         }
         .box-left{
             float: left;
@@ -55,11 +54,11 @@
             padding: 0px 10px;
         }
         .address-box p{
-            font-size:8px;
+            font-size:7px;
             line-height: .8;
         }
         .address-box strong{
-            font-size:8px;
+            font-size:7px;
             font-weight: 600;
         }
         .box-1{
@@ -79,12 +78,12 @@
             background: #ffffff;
             color: #484646;
             padding: 5px 11px;
-            font-size:8px;
+            font-size:7px;
             text-align: left;
         }
         .box-right-content{
             padding: 5px 0px;
-            font-size:8px;
+            font-size:7px;
         }
         .box-left-1{
             width: 50%;
@@ -105,20 +104,20 @@
             text-align: left;
         }
         .description-tbl th{
-            font-size:8px;
+            font-size:7px;
             color: white;
         }
         .description-tb2{
             width: 100%;
             text-align: left;
-            font-size:8px;
+            font-size:7px;
         }
         .description-tb3{
             width: 100%;
             text-align: left;
             border-top: 1px solid #aba5a5;
             padding: 7px 0px;
-            font-size:8px;
+            font-size:7px;
         }
         .description-tb3 td{
             line-height: 15px;
@@ -128,31 +127,31 @@
             padding: 5px 0px;
             color: white;
             text-align: center;
-            margin: 6px 0px;
-            font-size:8px;
+            margin: 20px 0px;
+            font-size:7px;
         }
         .bank-content{
             text-align: center;
         }
         .bank-content p{
-            font-size:8px;
+            font-size:7px;
         }
         .note{
             text-align: center;
-            margin: 10px 0px;
+            margin: 20px 0px;
         }
         .note p{
-            font-size:8px;
+            font-size:7px;
         }
         .note p>strong{
-            font-size:8px;
+            font-size:7px;
         }
         .footer-text{
             text-align: center;
             border-top: 1px solid #b7b5b5;
         }
         .footer-text p{
-            font-size:8px;
+            font-size:7px;
             line-height: 2px;
         }
         .address-box-to {
@@ -160,11 +159,11 @@
             width: 50%;
         }
         .address-box-to strong {
-            font-size:8px;
+            font-size:7px;
             font-weight: 600;
         }
         .address-box-to p {
-            font-size:8px;
+            font-size:7px;
             font-weight: 400;
             text-transform: uppercase;
             line-height: 1.8;
@@ -174,15 +173,15 @@
         }
         .terms-condition h5{
             margin-bottom: 0px;
-            font-size:8px;
+            font-size:7px;
         }
         .terms-condition ol{
             padding-left: 15px;
-            margin-top: 4px;
+            margin-top: 15px;
             margin-bottom: 0px;
         }
         .terms-condition ol>li{
-            font-size:8px;
+            font-size:7px;
         }
         .box-right-table{
             /*border: 1px solid black;*/
@@ -387,7 +386,7 @@
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $tax_tot); ?></td>
                             </tr>
                         </table>
-                        <table class="description-tbl" style="margin-bottom: 2px;">
+                        <table class="description-tbl" style="margin-bottom: 10px;">
                             <thead>
                                 <tr>
                                     <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 6px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>

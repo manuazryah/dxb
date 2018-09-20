@@ -223,12 +223,20 @@ class LogisticsController extends Controller {
     public function actionGetService() {
         if (Yii::$app->request->isAjax) {
             $service_id = $_POST['service'];
-            $res = '';
+            $currency = $_POST['currency'];
             $service_data = \common\models\Service::find()->where(['id' => $service_id])->one();
             if (!empty($service_data)) {
-                $res = $service_data->unit_price != '' ? $service_data->unit_price : '';
+                if ($currency == 1) {
+                    $vat = '';
+                    $price = $service_data->usd_amount != '' ? $service_data->usd_amount : '';
+                } else {
+                    $vat = $service_data->vat;
+                    $price = $service_data->unit_price != '' ? $service_data->unit_price : '';
+                }
+                $arr_variable1 = array('unit_price' => $price, 'vat' => $vat);
+                $data['result'] = $arr_variable1;
+                echo json_encode($data);
             }
-            return $res;
         }
     }
 
@@ -250,7 +258,7 @@ class LogisticsController extends Controller {
     }
 
     /*
-     * This function generate logistic report
+     * This function generate logistic report with headers
      */
 
     public function actionReports($id) {
@@ -272,24 +280,59 @@ class LogisticsController extends Controller {
     }
 
     /*
+     * This function generate logistic report without headers
+     */
+
+    public function actionReport($id) {
+        $logistics = Logistics::findOne($id);
+        $logistic_services = \common\models\LogisticsService::find()->where(['logistics_id' => $id])->all();
+        Yii::$app->session->set('logistics', $this->renderPartial('report', [
+                    'logistics' => $logistics,
+                    'logistic_services' => $logistic_services,
+                    'save' => false,
+                    'print' => true,
+        ]));
+        echo $this->renderPartial('report', [
+            'logistics' => $logistics,
+            'logistic_services' => $logistic_services,
+            'save' => true,
+            'print' => false,
+        ]);
+        exit;
+    }
+
+    /*
      * This function save the generate Logistics report
      */
 
     public function actionSaveReport($id) {
         $logistics = Logistics::findOne($id);
         if (!empty($logistics)) {
-            $logistics->reports = Yii::$app->session['logistics'];
-            $logistics->save();
+            $model = new \common\models\LogisticReports();
+            $model->logistics_id = $logistics->id;
+            $model->invoice_no = $logistics->invoice_no;
+            $model->report = Yii::$app->session['logistics'];
+            $model->status = 1;
+            Yii::$app->SetValues->Attributes($model);
+            $model->save();
         }
         echo "<script>window.close();</script>";
         exit;
     }
 
     public function actionShowReport($id) {
-        $model_report = Logistics::findOne($id);
+        $model_report = \common\models\LogisticReports::findOne($id);
         return $this->renderPartial('_old', [
                     'model_report' => $model_report,
         ]);
+    }
+
+    public function actionRemoveReport($id) {
+        $model_report = \common\models\LogisticReports::findOne($id);
+        if (!empty($model_report)) {
+            $model_report->delete();
+        }
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 }

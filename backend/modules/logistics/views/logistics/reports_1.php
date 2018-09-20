@@ -33,58 +33,51 @@
             padding: 13px 0px;
             font-size: 20px;
             font-weight: 600;
-            padding-top: 0px;
         }
         .header-box{
             width: 100%;
-            /*border: 1px solid #aba5a5;*/
-            margin-bottom: 8px;
+            border: 1px solid #aba5a5;
+            margin-bottom: 30px;
         }
         .box-left{
             float: left;
-            width: 65%;
-            /*border-right: 1px solid #aba5a5;*/
+            width: 75%;
+            border-right: 1px solid #aba5a5;
             display: inline-flex;
         }
         .box-right{
             float: left;
-            width: 35%;
+            width: 25%;
             text-align: center;
         }
         .address-box{
             padding: 0px 10px;
         }
         .address-box p{
-            font-size:8px;
+            font-size: 6px;
             line-height: .8;
         }
         .address-box strong{
-            font-size:8px;
+            font-size: 6px;
             font-weight: 600;
         }
         .box-1{
             width: 100%;
             display: inline-flex;
-            border: 1px solid #aba5a5;
-            border-bottom: none;
-        }
-        .box-2{
-            border-top: none;
-            border-left: none;
+            border-bottom: 1px solid #aba5a5;
         }
         .box-1:last-child{
             border-bottom: 0px;
         }
         .box-right-label{
-            background: #ffffff;
-            color: #484646;
-            padding: 5px 11px;
-            font-size:8px;
-            text-align: left;
+            background: #484646;
+            color: white;
+            padding: 5px 0px;
+            font-size: 6px;
         }
         .box-right-content{
             padding: 5px 0px;
-            font-size:8px;
+            font-size: 6px;
         }
         .box-left-1{
             width: 50%;
@@ -105,20 +98,20 @@
             text-align: left;
         }
         .description-tbl th{
-            font-size:8px;
+            font-size: 6px;
             color: white;
         }
         .description-tb2{
             width: 100%;
             text-align: left;
-            font-size:8px;
+            font-size: 6px;
         }
         .description-tb3{
             width: 100%;
             text-align: left;
             border-top: 1px solid #aba5a5;
             padding: 7px 0px;
-            font-size:8px;
+            font-size: 6px;
         }
         .description-tb3 td{
             line-height: 15px;
@@ -128,31 +121,31 @@
             padding: 5px 0px;
             color: white;
             text-align: center;
-            margin: 6px 0px;
-            font-size:8px;
+            margin: 20px 0px;
+            font-size: 6px;
         }
         .bank-content{
             text-align: center;
         }
         .bank-content p{
-            font-size:8px;
+            font-size: 6px;
         }
         .note{
             text-align: center;
-            margin: 10px 0px;
+            margin: 20px 0px;
         }
         .note p{
-            font-size:8px;
+            font-size: 6px;
         }
         .note p>strong{
-            font-size:8px;
+            font-size: 6px;
         }
         .footer-text{
             text-align: center;
             border-top: 1px solid #b7b5b5;
         }
         .footer-text p{
-            font-size:8px;
+            font-size: 6px;
             line-height: 2px;
         }
         .address-box-to {
@@ -160,11 +153,11 @@
             width: 50%;
         }
         .address-box-to strong {
-            font-size:8px;
+            font-size: 6px;
             font-weight: 600;
         }
         .address-box-to p {
-            font-size:8px;
+            font-size: 6px;
             font-weight: 400;
             text-transform: uppercase;
             line-height: 1.8;
@@ -174,38 +167,15 @@
         }
         .terms-condition h5{
             margin-bottom: 0px;
-            font-size:8px;
+            font-size: 6px;
         }
         .terms-condition ol{
             padding-left: 15px;
-            margin-top: 4px;
+            margin-top: 15px;
             margin-bottom: 0px;
         }
         .terms-condition ol>li{
-            font-size:8px;
-        }
-        .box-right-table{
-            /*border: 1px solid black;*/
-            border-collapse: collapse;
-        }
-        .box-right-label{
-            border: 1px solid #aba5a5;
-            border-collapse: collapse;
-            padding: 5px;
-            text-align: left;
-        }
-        .box-right-content{
-            border: 1px solid #aba5a5;
-            border-collapse: collapse;
-            padding: 5px;
-            text-align: left; 
-            border-right: none;
-        }
-        .box-right-table1 tr:first-child th, .box-right-table1 tr:first-child td{
-            border-top: 0px;
-        }
-        .box-right-table1 tr:last-child th, .box-right-table1 tr:last-child td{
-            border-bottom: 0px;
+            font-size: 6px;
         }
     </style>
     <table border ="0"  class="main-tabl" border="0">
@@ -241,7 +211,7 @@
                     <div class="header-box">
                         <div class="box-1">
                             <div class="box-left">
-                                <div class="address-box" style="width:50%;">
+                                <div class="address-box">
                                     <p> <strong>From,</strong><p>
                                         <strong>Emperor&nbsp;SHIPPING LINES LLC</strong>
                                     <p>#215, AL AHBABI BLD 2, 2ND FLOOR</p>
@@ -249,7 +219,21 @@
                                     <p>P.O.BOX - 233797,&nbsp;DUBAI, UAE</p>
                                     <p><strong>TRN : 100315372100003</strong></p>
                                 </div>
-                                <div class="address-box-to" style="width:50%;">
+                            </div>
+                            <div class="box-right">
+                                <table class="box-right-tbl">
+                                    <div class="box-right-label">INVOICE NO</div>
+                                    <div class="box-right-content"><?= $logistics->invoice_no != '' ? $logistics->invoice_no : 'N/A' ?></div>
+                                    <div class="box-right-label">DATE</div>
+                                    <div class="box-right-content"><?= $logistics->invoice_date != '' ? $logistics->invoice_date : 'N/A' ?></div>
+                                    <div class="box-right-label">PURPOSE OF VISIT</div>
+                                    <div class="box-right-content"><?= $logistics->purpose_of_visit != '' ? $logistics->purpose_of_visit : 'N/A' ?></div>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box-1">
+                            <div class="box-left">
+                                <div class="address-box-to">
                                     <p style="line-height: 8px;"> <strong>To,</strong><p>
                                         <?php
                                         if (!empty($logistics)) {
@@ -265,57 +249,37 @@
                                 </div>
                             </div>
                             <div class="box-right">
-                                <table class="box-right-table box-right-table1" style="width: 100%;">
-                                    <tr class="border_bottom">
-                                        <th class="box-right-label">INVOICE NO</th>
-                                        <td class="box-right-content"><?= $logistics->invoice_no != '' ? $logistics->invoice_no : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">DATE</th>
-                                        <td class="box-right-content"><?= $logistics->invoice_date != '' ? $logistics->invoice_date : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">PURPOSE OF VISIT</th>
-                                        <td class="box-right-content"><?= $logistics->purpose_of_visit != '' ? $logistics->purpose_of_visit : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">VOYAGE</th>
-                                        <td class="box-right-content"><?= $logistics->voyage != '' ? $logistics->voyage : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">VESSEL</th>
-                                        <td class="box-right-content"><?= $logistics->vessel != '' ? $logistics->vessel : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">PORT</th>
-                                        <td class="box-right-content"><?= $logistics->port != '' ? $logistics->port : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">CRT</th>
-                                        <td class="box-right-content"><?= $logistics->GRT != '' ? $logistics->GRT : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">LOA</th>
-                                        <td class="box-right-content"><?= $logistics->LOA != '' ? $logistics->LOA : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">CARGO</th>
-                                        <td class="box-right-content"><?= $logistics->cargo != '' ? $logistics->cargo : 'N/A' ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="box-right-label">JOB REF</th>
-                                        <td class="box-right-content"><?= $logistics->job_ref != '' ? $logistics->job_ref : 'N/A' ?></td>
-                                    </tr>
+                                <table class="box-right-tbl">
+                                    <div class="box-right-label">VOYAGE</div>
+                                    <div class="box-right-content"><?= $logistics->voyage != '' ? $logistics->voyage : 'N/A' ?></div>
+                                    <div class="box-right-label">VESSEL</div>
+                                    <div class="box-right-content"><?= $logistics->vessel != '' ? $logistics->vessel : 'N/A' ?></div>
+                                    <div class="box-right-label">PORT</div>
+                                    <div class="box-right-content"><?= $logistics->port != '' ? $logistics->port : 'N/A' ?></div>
                                 </table>
                             </div>
                         </div>
-                        <div class="box-1 box-2">
-                            <table class="box-right-table" style="width:100%;">
-                                <tr>
-                                    <th class="box-right-label">REMARKS : </th>
-                                    <td class="box-right-content"><?= $logistics->remarks != '' ? $logistics->remarks : 'N/A' ?></td>
-                                </tr>
-                            </table>
+                        <div class="box-1">
+                            <div class="box-left">
+                                <div class="box-left-1">
+                                    <div class="box-right-label">CRT</div>
+                                    <div class="box-right-content"><?= $logistics->GRT != '' ? $logistics->GRT : 'N/A' ?></div>
+                                    <div class="box-right-label">LOA</div>
+                                    <div class="box-right-content"><?= $logistics->LOA != '' ? $logistics->LOA : 'N/A' ?></div>
+                                </div>
+                                <div class="box-left-2">
+                                    <div class="box-right-label">REMARKS</div>
+                                    <div class="box-right-content"><?= $logistics->remarks != '' ? $logistics->remarks : 'N/A' ?></div>
+                                </div>
+                            </div>
+                            <div class="box-right">
+                                <table class="box-right-tbl">
+                                    <div class="box-right-label">CARGO</div>
+                                    <div class="box-right-content"><?= $logistics->cargo != '' ? $logistics->cargo : 'N/A' ?></div>
+                                    <div class="box-right-label">JOB REF</div>
+                                    <div class="box-right-content"><?= $logistics->job_ref != '' ? $logistics->job_ref : 'N/A' ?></div>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </td>
@@ -387,7 +351,7 @@
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $tax_tot); ?></td>
                             </tr>
                         </table>
-                        <table class="description-tbl" style="margin-bottom: 2px;">
+                        <table class="description-tbl" style="margin-bottom: 10px;">
                             <thead>
                                 <tr>
                                     <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 6px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>

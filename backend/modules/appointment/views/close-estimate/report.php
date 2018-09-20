@@ -240,47 +240,53 @@ and open the template in the editor.
         <thead>
             <tr>
                 <th style="width:100%">
-                    <div class="header">
-                        <div class="main-left">
-                            <?php
-                            if (!empty($fda_template)) {
-                                if ($fda_template->left_logo != '') {
-                                    $dirPath = Yii::getAlias(Yii::$app->params['uploadPath']) . '/uploads/report_template/' . $fda_template->id . '/' . $fda_template->left_logo;
-                                    if (file_exists($dirPath)) {
-                                        $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'uploads/report_template/' . $fda_template->id . '/' . $fda_template->left_logo . '"/>';
+                    <?php
+                    if ($fda_type == 1) {
+                        ?>
+                        <div class="header">
+                            <div class="main-left">
+                                <?php
+                                if (!empty($fda_template)) {
+                                    if ($fda_template->left_logo != '') {
+                                        $dirPath = Yii::getAlias(Yii::$app->params['uploadPath']) . '/uploads/report_template/' . $fda_template->id . '/' . $fda_template->left_logo;
+                                        if (file_exists($dirPath)) {
+                                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'uploads/report_template/' . $fda_template->id . '/' . $fda_template->left_logo . '"/>';
+                                        } else {
+                                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
+                                        }
                                     } else {
                                         $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
                                     }
                                 } else {
                                     $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
                                 }
-                            } else {
-                                $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
-                            }
-                            echo $img;
-                            ?>
-                        </div>
-                        <div class="main-right">
-                            <?php
-                            if (!empty($fda_template)) {
-                                if ($fda_template->right_logo != '') {
-                                    $dirPath = Yii::getAlias(Yii::$app->params['uploadPath']) . '/uploads/report_template/' . $fda_template->id . '/' . $fda_template->right_logo;
-                                    if (file_exists($dirPath)) {
-                                        $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'uploads/report_template/' . $fda_template->id . '/' . $fda_template->right_logo . '"/>';
+                                echo $img;
+                                ?>
+                            </div>
+                            <div class="main-right">
+                                <?php
+                                if (!empty($fda_template)) {
+                                    if ($fda_template->right_logo != '') {
+                                        $dirPath = Yii::getAlias(Yii::$app->params['uploadPath']) . '/uploads/report_template/' . $fda_template->id . '/' . $fda_template->right_logo;
+                                        if (file_exists($dirPath)) {
+                                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'uploads/report_template/' . $fda_template->id . '/' . $fda_template->right_logo . '"/>';
+                                        } else {
+                                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
+                                        }
                                     } else {
                                         $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
                                     }
                                 } else {
                                     $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
                                 }
-                            } else {
-                                $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
-                            }
-                            echo $img;
-                            ?>
+                                echo $img;
+                                ?>
+                            </div>
+                            <br/>
                         </div>
-                        <br/>
-                    </div>
+                        <?php
+                    }
+                    ?>
                 </th>
             </tr>
 
@@ -294,11 +300,11 @@ and open the template in the editor.
                         <?php
                         if ($principp != '') {
                             $close_estimates = CloseEstimate::find()
-                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $principp])->orderBy(['invoice_type' => SORT_ASC])
+                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $principp])
                                     ->all();
                         } else {
                             $close_estimates = CloseEstimate::find()
-                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])->orderBy(['invoice_type' => SORT_ASC])
+                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])
                                     ->all();
                         }
 //                    if ($invoice_type != 'all') {
@@ -482,7 +488,9 @@ and open the template in the editor.
                                     ?>
                                     <tr>
                                         <td style="width: 6%;"><?= $i ?></td>
-                                        <td style="width: 30%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
+                                        <td style="width: 30%;">
+                                            <span><?= $close_estimate->comment_to_fda ?></span>
+                                        </td>
                                         <?php
                                         $incoice_data = InvoiceNumber::find()->where("FIND_IN_SET($close_estimate->id,estimate_id)")->one();
                                         ?>
@@ -811,17 +819,23 @@ and open the template in the editor.
         <tfoot>
             <tr>
                 <td style="width:100%">
-                    <div class="footer">
-                        <span>
-                            <?php
-                            if (!empty($fda_template)) {
-                                if ($fda_template->footer_content != '') {
-                                    echo $fda_template->footer_content;
+                    <?php
+                    if ($fda_type == 1) {
+                        ?>
+                        <div class="footer">
+                            <span>
+                                <?php
+                                if (!empty($fda_template)) {
+                                    if ($fda_template->footer_content != '') {
+                                        echo $fda_template->footer_content;
+                                    }
                                 }
-                            }
-                            ?>
-                        </span>
-                    </div>
+                                ?>
+                            </span>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </td>
             </tr>
         </tfoot>

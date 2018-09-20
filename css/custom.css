@@ -468,3 +468,28 @@ a {
 .comment-tbl th{
     white-space:nowrap;
 }
+.report-list{
+    padding: 0px;
+    list-style: none;
+    display: inline-block;
+    width: 100%;
+}
+.report-list li{
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background: #e0e0e0;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-transform: capitalize;
+}
+.report-list li .close{
+    margin-left: 8px;
+    font-size: 13px;
+    margin-top: 3px;
+    color: #e40000;
+    opacity: 0.4;
+}
+.report-list li:hover .close{
+    opacity: 1;
+}

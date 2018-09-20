@@ -1,4 +1,4 @@
 <?php
 
-echo ($model_report->reports);
+echo ($model_report->report);
 ?>

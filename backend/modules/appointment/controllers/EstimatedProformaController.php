@@ -463,12 +463,16 @@ class EstimatedProformaController extends Controller {
     public function actionReports() {
         $princip = $_POST['principal'];
         $app = $_POST['app_id'];
+        $epda_type = $_POST['epda_type'];
         $appointment = Appointment::findOne($app);
         $epda_template = \common\models\ReportTemplate::find()->where(['status' => 1, 'type' => 1, 'default_address' => 1])->one();
+        $estimates = EstimatedProforma::findAll(['apponitment_id' => $appointment->id, 'principal' => $princip]);
         Yii::$app->session->set('epda', $this->renderPartial('report', [
                     'appointment' => $appointment,
                     'epda_template' => $epda_template,
                     'princip' => $princip,
+                    'epda_type' => $epda_type,
+                    'estimates' => $estimates,
                     'save' => false,
                     'print' => true,
         ]));
@@ -476,6 +480,8 @@ class EstimatedProformaController extends Controller {
             'appointment' => $appointment,
             'epda_template' => $epda_template,
             'princip' => $princip,
+            'epda_type' => $epda_type,
+            'estimates' => $estimates,
             'save' => true,
             'print' => false,
         ]);

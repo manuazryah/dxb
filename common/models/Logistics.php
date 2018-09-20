@@ -45,12 +45,12 @@ class Logistics extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['invoice_date', 'eta', 'etd', 'DOC', 'DOU', 'reports'], 'safe'],
-                [['invoice_date', 'invoice_no', 'debtor'], 'required'],
-                [['debtor', 'status', 'CB', 'UB', 'currency'], 'integer'],
-                [['purpose_of_visit', 'remarks'], 'string'],
-                [['invoice_no', 'voyage', 'vessel', 'port', 'cargo', 'job_ref', 'GRT', 'LOA'], 'string', 'max' => 100],
-                [['debtor'], 'exist', 'skipOnError' => true, 'targetClass' => LogisticDebtor::className(), 'targetAttribute' => ['debtor' => 'id']],
+            [['invoice_date', 'eta', 'etd', 'DOC', 'DOU', 'reports'], 'safe'],
+            [['invoice_date', 'invoice_no', 'debtor', 'category'], 'required'],
+            [['debtor', 'status', 'CB', 'UB', 'currency'], 'integer'],
+            [['purpose_of_visit', 'remarks'], 'string'],
+            [['invoice_no', 'voyage', 'vessel', 'port', 'cargo', 'job_ref', 'GRT', 'LOA'], 'string', 'max' => 100],
+            [['debtor'], 'exist', 'skipOnError' => true, 'targetClass' => LogisticDebtor::className(), 'targetAttribute' => ['debtor' => 'id']],
         ];
     }
 
@@ -65,6 +65,7 @@ class Logistics extends \yii\db\ActiveRecord {
             'eta' => 'ETA',
             'etd' => 'ETD',
             'debtor' => 'Debtor',
+            'category' => 'Category',
             'purpose_of_visit' => 'Purpose Of Visit',
             'voyage' => 'Voyage',
             'vessel' => 'Vessel',

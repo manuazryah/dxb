@@ -77,10 +77,7 @@ class AppointmentController extends Controller {
 
         if (!empty(Yii::$app->request->queryParams['AppointmentSearch']['stage'])) {
             $dataProvider->query->andWhere(['stage' => Yii::$app->request->queryParams['AppointmentSearch']['stage']]);
-        } else {
-            $dataProvider->query->andWhere(['<>', 'stage', 5]);
         }
-
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
@@ -127,7 +124,7 @@ class AppointmentController extends Controller {
             }
             $model->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
             $model->stage = 1;
-           if ($model->validate() && $model->save()) {
+            if ($model->validate() && $model->save()) {
                 $this->AddNotification($model);
                 $user = \common\models\Employee::find()->where(['CB' => $model->CB])->one();
                 if (!empty($user)) {
@@ -157,9 +154,45 @@ class AppointmentController extends Controller {
 
     public function SendEmail($model, $user_info, $user_name) {
         $to = $user_info->email;
+        if ($model->principal != '') {
+            $princip = explode(',', $model->principal);
+            $result = '';
+            $i = 0;
+            if (!empty($princip)) {
+                foreach ($princip as $val) {
+
+                    if ($i != 0) {
+                        $result .= ',';
+                    }
+                    $principals = \common\models\Debtor::findOne($val);
+                    $result .= $principals->principal_id;
+                    $i++;
+                }
+            }
+        }
+        if ($model->port_of_call != '') {
+            $port = Ports::findOne($model->port_of_call)->port_name;
+        } else {
+            $port = '';
+        }
+        if ($model->vessel_type == 1) {
+            $vessel = 'T - ' . \common\models\Vessel::findOne($model->tug)->vessel_name . ' / B - ' . \common\models\Vessel::findOne($model->barge)->vessel_name;
+        } else {
+            if ($model->vessel != '') {
+                $vessel = \common\models\Vessel::findOne($model->vessel)->vessel_name;
+            } else {
+                $vessel = '';
+            }
+        }
         $subject = ' Attenssion : ' . $user_info->name . ' ( New Appointment Created )';
         $message = '<html><head></head><body>';
-        $message .= '<p>New Appointment <span style="color: #2196F3;">' . $model->appointment_no . '</span> created by <span style="color: #2196F3;">' . $user_name . '</span> on <span style="color: #2196F3;">' . $model->DOC . ' </span></p>';
+        $message .= '<table style="width:100%;border: 1px solid #bdbbbb;border-collapse: collapse;text-align:left;"><caption style="border: 1px solid #bdbbbb;border-bottom: none;font-weight: 600;color: #2196F3;padding: 5px 0px;text-transform: uppercase;">Appointment Details</caption>';
+        $message .= '<tr><th style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">Vessel Name</th><td style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">' . $vessel . '</td></tr>';
+        $message .= '<tr><th style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">Appointment No</th><td style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">' . $model->appointment_no . '</td></tr>';
+        $message .= '<tr><th style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">Principle Name</th><td style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">' . $result . '</td></tr>';
+        $message .= '<tr><th style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">Port Name</th><td style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">' . $port . '</td></tr>';
+        $message .= '<tr><th style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">Created By</th><td style="border: 1px solid #bdbbbb;border-collapse: collapse;padding: 5px 10px;">' . $user_name . '</td></tr>';
+        $message .= '</table>';
         $message .= '</body></html>';
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n" .
@@ -463,13 +496,13 @@ class AppointmentController extends Controller {
     }
 
     public function actionAddNewPrincipals() {
-    
+
         if (Yii::$app->request->isAjax) {
             $debtor_model = new \common\models\Debtor();
             $data = $this->renderPartial('_form_add_principals', [
                 'debtor_model' => $debtor_model,
             ]);
-            
+
             echo $data;
         }
     }

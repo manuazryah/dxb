@@ -55,11 +55,11 @@
             padding: 0px 10px;
         }
         .address-box p{
-            font-size:8px;
+            font-size:9px;
             line-height: .8;
         }
         .address-box strong{
-            font-size:8px;
+            font-size:9px;
             font-weight: 600;
         }
         .box-1{
@@ -79,12 +79,12 @@
             background: #ffffff;
             color: #484646;
             padding: 5px 11px;
-            font-size:8px;
+            font-size:9px;
             text-align: left;
         }
         .box-right-content{
             padding: 5px 0px;
-            font-size:8px;
+            font-size:9px;
         }
         .box-left-1{
             width: 50%;
@@ -105,20 +105,20 @@
             text-align: left;
         }
         .description-tbl th{
-            font-size:8px;
+            font-size:9px;
             color: white;
         }
         .description-tb2{
             width: 100%;
             text-align: left;
-            font-size:8px;
+            font-size:9px;
         }
         .description-tb3{
             width: 100%;
             text-align: left;
             border-top: 1px solid #aba5a5;
             padding: 7px 0px;
-            font-size:8px;
+            font-size:9px;
         }
         .description-tb3 td{
             line-height: 15px;
@@ -129,30 +129,30 @@
             color: white;
             text-align: center;
             margin: 6px 0px;
-            font-size:8px;
+            font-size:9px;
         }
         .bank-content{
             text-align: center;
         }
         .bank-content p{
-            font-size:8px;
+            font-size:9px;
         }
         .note{
             text-align: center;
-            margin: 10px 0px;
+            margin: 20px 0px;
         }
         .note p{
-            font-size:8px;
+            font-size:9px;
         }
         .note p>strong{
-            font-size:8px;
+            font-size:9px;
         }
         .footer-text{
             text-align: center;
             border-top: 1px solid #b7b5b5;
         }
         .footer-text p{
-            font-size:8px;
+            font-size:9px;
             line-height: 2px;
         }
         .address-box-to {
@@ -160,11 +160,11 @@
             width: 50%;
         }
         .address-box-to strong {
-            font-size:8px;
+            font-size:9px;
             font-weight: 600;
         }
         .address-box-to p {
-            font-size:8px;
+            font-size:9px;
             font-weight: 400;
             text-transform: uppercase;
             line-height: 1.8;
@@ -174,15 +174,15 @@
         }
         .terms-condition h5{
             margin-bottom: 0px;
-            font-size:8px;
+            font-size:9px;
         }
         .terms-condition ol{
             padding-left: 15px;
-            margin-top: 4px;
+            margin-top: 15px;
             margin-bottom: 0px;
         }
         .terms-condition ol>li{
-            font-size:8px;
+            font-size:9px;
         }
         .box-right-table{
             /*border: 1px solid black;*/
@@ -209,27 +209,6 @@
         }
     </style>
     <table border ="0"  class="main-tabl" border="0">
-        <thead>
-            <tr>
-                <th style="width:100%">
-                    <div class="header">
-                        <div class="main-left">
-                            <?php
-                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoleft.jpg"/>';
-                            echo $img;
-                            ?>
-                        </div>
-                        <div class="main-right">
-                            <?php
-                            $img = '<img width="90px" height="75px" src="' . Yii::$app->homeUrl . 'images/logoright.jpg"/>';
-                            echo $img;
-                            ?>
-                        </div>
-                        <br/>
-                    </div>
-                </th>
-            </tr>
-        </thead>
         <tbody>
             <tr>
                 <td>
@@ -387,7 +366,7 @@
                                 <td style="width:15%;text-align:right"><?= sprintf('%0.2f', $tax_tot); ?></td>
                             </tr>
                         </table>
-                        <table class="description-tbl" style="margin-bottom: 2px;">
+                        <table class="description-tbl" style="margin-bottom: 10px;">
                             <thead>
                                 <tr>
                                     <td colspan="4"style="width:60%;text-align:right;color: #fff;font-size: 6px;">AMOUNT PAYABLE INCLUSIVE OF TAX</td>
@@ -427,12 +406,6 @@
         <tfoot>
             <tr>
                 <td style="width:100%">
-                    <div class="footer-text">
-                        <p>Head Office : Dubai - U.A.E., P.O.Box : 233797, Tel.:+971 4239 2266, Fax : + 971 4239 2244, E-mail : emperor@emperorlines.com</p>
-                        <p>Branch : Fujairah - U.A.E., P.O.Box : 9544, Tel.:+971 9223 4567, Fax : + 971 9223 4566, E-mail : empfuj@emperor.ae</p>
-                        <p>Branch : Sharjah / Khorfakkan,Suite No.:#222,Floor02,Warmseas Bldg, Tel: +971 223 4567 , Mob: +971 55 300 1545, E-mail : kfk@emperor.ae</p>
-                        <p>Branch : Ras Al Khaimah, Tel: +971 7268, Mob.: +971 55 300 1535, E-mail : operak@emperor.ae</p>
-                    </div>
                 </td>
             </tr>
         </tfoot>

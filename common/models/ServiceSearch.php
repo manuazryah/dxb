@@ -10,16 +10,15 @@ use common\models\Service;
 /**
  * ServiceSearch represents the model behind the search form about `common\models\Service`.
  */
-class ServiceSearch extends Service
-{
+class ServiceSearch extends Service {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'status', 'CB', 'UB'], 'integer'],
-            [['unit_price'], 'number'],
+            [['unit_price', 'usd_amount'], 'number'],
             [['DOC', 'DOU', 'service_name'], 'safe'],
         ];
     }
@@ -27,8 +26,7 @@ class ServiceSearch extends Service
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -40,8 +38,7 @@ class ServiceSearch extends Service
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Service::find();
 
         // add conditions that should always apply here
@@ -63,6 +60,7 @@ class ServiceSearch extends Service
             'id' => $this->id,
             'service_name' => $this->service_name,
             'unit_price' => $this->unit_price,
+            'usd_amount' => $this->usd_amount,
             'status' => $this->status,
             'CB' => $this->CB,
             'UB' => $this->UB,
@@ -72,4 +70,5 @@ class ServiceSearch extends Service
 
         return $dataProvider;
     }
+
 }

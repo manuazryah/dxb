@@ -70,7 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <?= Html::a('<i class="fa-th-list"></i><span> Manage Logistics</span>', ['logistics/index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
                 <?= Html::a('<i class="fa-th-list"></i><span> Create Logistics</span>', ['logistics/create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
-                <?= Html::a('<i class="fa-th-list"></i><span> Generate Invoice</span>', ['logistics/reports', 'id' => $id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'target' => '_blank']) ?>
+                <?= Html::a('<i class="fa-th-list"></i><span> Invoice With Header</span>', ['logistics/reports', 'id' => $id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'target' => '_blank']) ?>
+                <?= Html::a('<i class="fa-th-list"></i><span> Invoice Without Header</span>', ['logistics/report', 'id' => $id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'target' => '_blank']) ?>
                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                     <li>
                         <?php
@@ -165,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php $form = ActiveForm::begin(); ?>
                                 <td></td>
                                 <td style="width:20%;">
-                                    <?= $form->field($model, 'service')->dropDownList(ArrayHelper::map(Service::findAll(['status' => 1]), 'id', 'service_name'), ['prompt' => '-services-'])->label(FALSE) ?>
+                                    <?= $form->field($model, 'service')->dropDownList(ArrayHelper::map(Service::findAll(['status' => 1, 'category' => $logistics->category]), 'id', 'service_name'), ['prompt' => '-services-'])->label(FALSE) ?>
                                 </td>
                                 <td><?= $form->field($model, 'unit_price')->textInput(['placeholder' => 'Unit Price'])->label(false) ?></td>
                                 <td>
@@ -195,10 +196,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         </tbody>
                     </table>
-                    <div>
-                        <?php
-                        // echo Html::a('<span>Back to Close Estimate</span>', ['/appointment/close-estimate/add', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
-                        ?>
+                    <div class="saved-report">
+                        <h5 style="text-decoration: underline;text-decoration: underline;color: #2e5da7;font-size: 16px;font-weight: 600;">Saved Logistics Report</h5>
+                        <ul class="report-list">
+                            <?php
+                            if (!empty($model)) {
+                                $saved_reports = \common\models\LogisticReports::find()->where(['logistics_id' => $logistics->id])->all();
+                                if (!empty($saved_reports)) {
+                                    $n = 0;
+                                    foreach ($saved_reports as $saved_report) {
+                                        if (!empty($saved_report)) {
+                                            $n++;
+                                            ?>
+
+                                            <li><a class="name" href="<?= Yii::$app->homeUrl ?>logistics/logistics/show-report?id=<?= $saved_report->id ?>" target="_blank','width=750, height=500');return false;"><?= $logistics->invoice_no ?>-<?= $n ?></a><a class="close" href="<?= Yii::$app->homeUrl ?>logistics/logistics/remove-report?id=<?= $saved_report->id ?>" onclick="return confirm('Are you sure?')"><i class="fa fa-close"></i></a></li>
+                                                    <?php
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ?>
+                        </ul>
                     </div>
                 </div>
 
@@ -211,67 +229,74 @@ $this->params['breadcrumbs'][] = $this->title;
                 <script src="<?= Yii::$app->homeUrl; ?>js/select2/select2.min.js"></script>
 
                 <script>
-                    $(document).ready(function () {
-                        $(document).on('keyup mouseup', '#logisticsservice-unit_price', function (e) {
-                            multiply();
-                            CalculateTotal();
-                        });
-                        $(document).on('keyup mouseup', '#logisticsservice-qty', function (e) {
-                            multiply();
-                            CalculateTotal();
-                        });
-                        $(document).on('change', '#logisticsservice-service', function (e) {
-                            var service = $(this).val();
-                            $.ajax({
-                                type: 'POST',
-                                cache: false,
-                                async: false,
-                                data: {service: service},
-                                url: '<?= Yii::$app->homeUrl; ?>logistics/logistics/get-service',
-                                success: function (data) {
-                                    $('#logisticsservice-unit_price').val(data);
-                                    multiply();
-                                }
-                            });
-                        });
-                        $(document).on('change', '#logisticsservice-vat_id', function (e) {
-                            var vat_id = $(this).val();
-                            $.ajax({
-                                type: 'POST',
-                                cache: false,
-                                async: false,
-                                data: {vat_id: vat_id},
-                                url: '<?= Yii::$app->homeUrl; ?>logistics/logistics/get-tax',
-                                success: function (data) {
-                                    $('#vat_value').val(data);
-                                    CalculateTotal();
-                                }
-                            });
-                        });
+                                                $(document).ready(function () {
+                                                    $(document).on('keyup mouseup', '#logisticsservice-unit_price', function (e) {
+                                                        multiply();
+                                                        CalculateTotal();
+                                                    });
+                                                    $(document).on('keyup mouseup', '#logisticsservice-qty', function (e) {
+                                                        multiply();
+                                                        CalculateTotal();
+                                                    });
+                                                    $(document).on('change', '#logisticsservice-service', function (e) {
+                                                        var service = $(this).val();
+                                                        var currency = '<?php echo $logistics->currency; ?>';
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            cache: false,
+                                                            async: false,
+                                                            data: {service: service, currency: currency},
+                                                            url: '<?= Yii::$app->homeUrl; ?>logistics/logistics/get-service',
+                                                            success: function (data) {
+                                                                var res = $.parseJSON(data);
+                                                                $('#logisticsservice-unit_price').val(res.result['unit_price']);
+                                                                $("#logisticsservice-vat_id").val(res.result['vat']);
+                                                                if (res.result['vat'] != '') {
+                                                                    $("#logisticsservice-vat_id").trigger("change");
+                                                                }
+                                                                multiply();
+                                                            }
+                                                        });
+                                                    });
+                                                    $(document).on('change', '#logisticsservice-vat_id', function (e) {
+                                                        var vat_id = $(this).val();
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            cache: false,
+                                                            async: false,
+                                                            data: {vat_id: vat_id},
+                                                            url: '<?= Yii::$app->homeUrl; ?>logistics/logistics/get-tax',
+                                                            success: function (data) {
+                                                                $('#vat_value').val(data);
+                                                                CalculateTotal();
+                                                            }
+                                                        });
+                                                    });
 
-                    });
-                    function multiply() {
-                        var rate = $("#logisticsservice-unit_price").val();
-                        var qty = $("#logisticsservice-qty").val();
-                        if (rate != '' && qty != '') {
-                            $("#logisticsservice-taxable_value").val(rate * qty);
-                        } else {
-                            $("#logisticsservice-taxable_value").val('');
-                        }
-                    }
-                    function CalculateTotal() {
-                        var total = $("#logisticsservice-taxable_value").val();
-                        if (total != '' && total > 0) {
-                            var tax_value = $("#vat_value").val();
-                            if (tax_value != '' && tax_value > 0) {
-                                var tax_amount = ((total * tax_value) / 100);
-                                var grand_total = (parseFloat(total) + parseFloat(tax_amount));
-                                $("#logisticsservice-total").val(grand_total);
-                            } else {
-                                $("#logisticsservice-total").val(total);
-                            }
-                        }
-                    }
+                                                });
+                                                function multiply() {
+                                                    var rate = $("#logisticsservice-unit_price").val();
+                                                    var qty = $("#logisticsservice-qty").val();
+                                                    if (rate != '' && qty != '') {
+                                                        $("#logisticsservice-taxable_value").val(rate * qty);
+                                                    } else {
+                                                        $("#logisticsservice-taxable_value").val('');
+                                                    }
+                                                    CalculateTotal();
+                                                }
+                                                function CalculateTotal() {
+                                                    var total = $("#logisticsservice-taxable_value").val();
+                                                    if (total != '' && total > 0) {
+                                                        var tax_value = $("#vat_value").val();
+                                                        if (tax_value != '' && tax_value > 0) {
+                                                            var tax_amount = ((total * tax_value) / 100);
+                                                            var grand_total = (parseFloat(total) + parseFloat(tax_amount));
+                                                            $("#logisticsservice-total").val(grand_total);
+                                                        } else {
+                                                            $("#logisticsservice-total").val(total);
+                                                        }
+                                                    }
+                                                }
                 </script>
             </div>
         </div>

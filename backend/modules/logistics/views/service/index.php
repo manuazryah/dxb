@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                                            'id',
                             'service_name',
                             'unit_price',
+                            'usd_amount',
                             [
                                 'attribute' => 'status',
                                 'format' => 'raw',

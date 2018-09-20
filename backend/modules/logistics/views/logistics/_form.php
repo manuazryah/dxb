@@ -36,6 +36,10 @@ use yii\helpers\ArrayHelper;
     </div>
     <div class="row">
         <div class="col-md-4 pad-left-15">
+            <?php $categories = ArrayHelper::map(common\models\LogisticsCategory::find()->all(), 'id', 'category'); ?>
+            <?= $form->field($model, 'category')->dropDownList($categories, ['prompt' => '-Choose a Category-']) ?>
+        </div>
+        <div class="col-md-4 pad-left-15">
             <?= $form->field($model, 'purpose_of_visit')->textInput() ?>
         </div>
         <div class="col-md-4 pad-left-15">

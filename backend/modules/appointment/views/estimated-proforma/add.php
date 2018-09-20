@@ -86,7 +86,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                     }
                     ?>
-
+                    <div class="col-md-4">
+                        <select name = "epda_type" id = "epda_type" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="1">Estimated Invoice</option>
+                            <option value="2">Departure DA</option>
+                        </select>
+                    </div>
                     <div class="col-md-4">
                         <?= Html::submitButton('<i class="fa-print"></i><span>Generate EPDA</span>', ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
                         <?= Html::endForm() ?>
@@ -234,7 +240,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                             ?>
                                         </td>
-                                        <!--<td><?php // $estimate->images;                                                                                                                                                                                                                                        ?></td>-->
+                                        <!--<td><?php // $estimate->images;                                                                                                                                                                                                                                             ?></td>-->
                                         <td>
                                             <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
                                             <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -299,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                                                                                                                                                                                                        ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                                                                                                                                                                                                             ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -442,7 +448,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="row" style="width: 200px;display: inline-block;margin: 0px;">
                                     <div class="upload_file_list" style="float:left;height: 55px;">
                                         <div>
-                                            <!--<span class=""><?php // echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('/appointment/estimated-proforma/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';                                                                    ?></span>-->
+                                            <!--<span class=""><?php // echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('/appointment/estimated-proforma/show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;';                                                                         ?></span>-->
                                             <span class=""><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report', 'id' => $estmate_report->id], ['target' => "_blank','width=750, height=500');return false;"]) . '&nbsp;&nbsp;'; ?></span>
                                         </div>
                                         <div style="color:#6b6969;">
@@ -515,7 +521,7 @@ $this->params['breadcrumbs'][] = $this->title;
      }
      });
      }, 800); // just an example
-
+     
      }*/
 </script>
 <div class="modal fade" id="add-sub">

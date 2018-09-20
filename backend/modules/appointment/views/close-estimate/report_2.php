@@ -16,6 +16,8 @@ use common\models\Currency;
 use common\models\EstimateReport;
 use common\models\InvoiceNumber;
 use common\models\FundingAllocation;
+
+$default_currency = Currency::findOne($appointment->currency);
 ?>
 <!DOCTYPE html>
 <!--
@@ -222,6 +224,15 @@ and open the template in the editor.
             font-size: 12px;
             color: #464545;
         }
+        .closeestimate-content{
+            text-transform: uppercase;
+        }
+        .closeestimate-content p{
+            font-size: 11px;
+        }
+        .closeestimate-content td{
+            font-size: 11px !important;
+        }
     </style>
     <!--    </head>
         <body >-->
@@ -277,16 +288,17 @@ and open the template in the editor.
         <tbody>
             <tr>
                 <td>
-                    <div class="heading">VOYAGE DISBURSEMENT ACCOUNT</div>
+                    <div class="heading">TAX INVOICE</div>
+                    <div class="heading">FINAL DISBURSEMENT ACCOUNT</div>
                     <div class="closeestimate-content">
                         <?php
                         if ($principp != '') {
                             $close_estimates = CloseEstimate::find()
-                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $principp])
+                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $principp])->orderBy(['invoice_type' => SORT_ASC])
                                     ->all();
                         } else {
                             $close_estimates = CloseEstimate::find()
-                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])
+                                    ->where(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])->orderBy(['invoice_type' => SORT_ASC])
                                     ->all();
                         }
 //                    if ($invoice_type != 'all') {
@@ -311,14 +323,20 @@ and open the template in the editor.
                             <tr>
                                 <td rowspan="2" style="width: 50%;">
                                     <p>
-                                        EMPEROR SHIPPING LINES LLC<br>
-                                        Room 06 / Floor II; P.O.Box-328231<br>
-                                        Near Saqr Port, RAK Medical Bldg, Al Shaam, <br>
-                                        Ras Al Khaimah, UAE
+                                        <strong>From,</strong><br><br>
+                                        <strong>Emperor SHIPPING LINES LLC<br>
+                                            #215, AL AHBABI BLD 2, 2ND FLOOR<br>
+                                            NEAR DUBAI GRAND HOTEL, AL QUASIS<br>
+                                            P.O.BOX - 233797, DUBAI, UAE</strong>
                                     </p>
+                                    <?php if ($fda_template->tax_id != '') { ?>
+                                        <p style="font-weight:700;">TRN : <?= $fda_template->tax_id ?></p>
+                                    <?php }
+                                    ?>
                                 </td>
                                 <?php
                                 $est_id = '';
+                                $i = 0;
                                 if (!empty($close_estimates)) {
                                     foreach ($close_estimates as $close_estimate) {
                                         $i++;
@@ -331,10 +349,10 @@ and open the template in the editor.
                                 } else {
                                     $principal_id = $appointment->principal;
                                 }
-                                $model_report = $this->context->InvoiceGeneration($appointment->id, $principal_id, $est_id);
+                                $model_report = $this->context->InvoiceGeneration($appointment->id, $principal_id, $est_id, $invoice_num);
                                 ?>
 
-                                <td style="width: 25%;">Invoice No : <?= $model_report->invoice_number ?>-<?= $model_report->sub_invoice ?></td>
+                                <td style="width: 25%;"><strong>Invoice Number :</strong> <?= $model_report->invoice_number ?></td>
                                 <?php
                                 if ($invoice_date != '') {
                                     $date_invoice = date('d-M-Y', strtotime($invoice_date));
@@ -342,7 +360,7 @@ and open the template in the editor.
                                     $date_invoice = '';
                                 }
                                 ?>
-                                <td style="width: 25%;">Invoice Date : <?php echo $date_invoice; ?></td>
+                                <td style="width: 25%;"><strong>Invoice Date :</strong> <?php echo $date_invoice; ?></td>
                             </tr>
                             <tr>
                                 <?php
@@ -355,8 +373,8 @@ and open the template in the editor.
                                     $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
                                 }
                                 ?>
-                                <td style="width: 25%;">EPDA Ref : <?php echo $ref_no; ?></td>
-                                <td style="width: 25%;">Customer Code :
+                                <td style="width: 25%;"><strong>EPDA Ref :</strong>  <?php echo $ref_no; ?></td>
+                                <td style="width: 25%;"> <strong>Customer Code :</strong>
                                     <?php
                                     if ($principp != '') {
                                         echo $appointment->getClintCode($principp);
@@ -371,20 +389,39 @@ and open the template in the editor.
                             <tr>
                                 <td rowspan="3" style="width: 50%;">
                                     <p>
-                                        <?php
-                                        if ($principp != '') {
-                                            echo $appointment->getInvoiceAddress($principp);
-                                        } else {
-                                            echo $appointment->getInvoiceAddress($appointment->principal);
-                                        }
-                                        ?>
+                                        <strong>
+                                            <?php
+                                            if ($principp != '') {
+                                                echo '<b>To</b>,<br><br>';
+                                                echo $appointment->getInvoiceAddress($principp);
+                                            } else {
+                                                echo '<b>To</b>,<br><br>';
+                                                echo $appointment->getInvoiceAddress($appointment->principal);
+                                            }
+                                            ?>
+                                        </strong>
+                                    </p>
+                                    <p style="font-weight: 700;">
+                                        <strong>
+                                            <?php
+                                            if ($principp != '') {
+                                                echo $appointment->getDebtorTax($principp);
+                                            } else {
+                                                echo $appointment->getDebtorTax($appointment->principal);
+                                            }
+                                            ?>
+                                        </strong>
                                     </p>
                                 </td>
-                                <td style="width: 25%;">Vessel Name : <?php
+                                <td style="width: 25%;"><strong>Vessel Name :</strong> <?php
                                     if ($appointment->vessel_type == 1) {
                                         echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                     } else {
-                                        echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                        if ($appointment->vessel != '') {
+                                            echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                        } else {
+                                            echo '';
+                                        }
                                     }
                                     ?>
                                 </td>
@@ -397,20 +434,20 @@ and open the template in the editor.
                                     }
                                 }
                                 ?>
-                                <td style="width: 25%;">Ops Reference : <?php echo $appointment->appointment_no . $this->context->oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
+                                <td style="width: 25%;"><strong>Operation Job Number :</strong> <?php echo $appointment->appointment_no . $this->context->oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
                             </tr>
                             <?php ?>
                             <tr>
-                                <td style="width: 25%;">Port of Call : <?= $appointment->portOfCall->port_name ?> </td>
-                                <td style="width: 25%;">Client Ref : <?= $appointment->client_reference ?></td>
+                                <td style="width: 25%;"> <strong>Port of Call :</strong>  <?= $appointment->portOfCall->port_name ?> </td>
+                                <td style="width: 25%;"><strong>Voyage Number :</strong>  <?= $appointment->client_reference ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 25%;">Arrival Date : <?php
+                                <td style="width: 25%;">  <strong>Arrival Date :</strong><?php
                                     if ($ports->all_fast != '') {
                                         echo date("d-M-Y", strtotime($ports->all_fast));
                                     }
                                     ?></td>
-                                <td style="width: 25%;">Sailing Date : <?php
+                                <td style="width: 25%;"><strong>Sailing Date :</strong> <?php
                                     if ($ports->cast_off != '') {
                                         echo date("d-M-Y", strtotime($ports->cast_off));
                                     }
@@ -427,11 +464,13 @@ and open the template in the editor.
                         <h6 class="sub-heading">Total Disbursement</h6>
                         <table border ="0"  class="table tbl">
                             <tr>
-                                <th style="width: 10%;">Sl No.</th>
-                                <th style="width: 40%;">Particulars</th>
-                                <th style="width: 15%;">Invoice Reference </th>
-                                <th style="width: 15%;">Tax </th>
-                                <th style="width: 20%;">Amount</th>
+                                <th style="width: 6%;">Sl No.</th>
+                                <th style="width: 30%;">Particulars</th>
+                                <th style="width: 15%;">Invoice Reference</th>
+                                <th style="width: 12%;">Amount</th>
+                                <th style="width: 11%;">Vat %</th>
+                                <th style="width: 15%;">Taxable Amount</th>
+                                <th style="width: 11%;">Tax Amount</th>
                             </tr>
                             <?php
                             $i = 0;
@@ -442,20 +481,49 @@ and open the template in the editor.
                                     $i++;
                                     ?>
                                     <tr>
-                                        <td style="width: 10%;"><?= $i ?></td>
-                                        <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
+                                        <td style="width: 6%;"><?= $i ?></td>
+                                        <td style="width: 30%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
                                         <?php
                                         $incoice_data = InvoiceNumber::find()->where("FIND_IN_SET($close_estimate->id,estimate_id)")->one();
                                         ?>
-                                        <td style="width: 15%;"><?php if (isset($close_estimate->invoice_type)) { ?> <?= InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?> <?php } ?><?php
+                                        <td style="width: 15%;text-align: center;"><?php if (isset($close_estimate->invoice_type)) { ?> <?= InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?> <?php } ?><?php
                                             if (!empty($incoice_data)) {
                                                 if ($incoice_data->sub_invoice != '') {
                                                     echo '-' . $incoice_data->sub_invoice;
                                                 }
                                             }
                                             ?></td>
-                                        <td style="width: 15%;text-align:right;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->tax_amount); ?></td>
-                                        <td style="width: 20%;text-align:right;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
+                                        <td style="width: 12%;text-align:right;">
+                                            <?php
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat(round($close_estimate->fda * $default_currency->currency_value, 2));
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($close_estimate->fda);
+                                            }
+                                            ?>
+                                        </td>
+                                        <?php
+                                        $percent = ($close_estimate->tax_amount / $close_estimate->fda) * 100;
+                                        ?>
+                                        <td style="width: 11%;text-align:right;"><?= $percent; ?> %</td>
+                                        <td style="width: 15%;text-align:right;">
+                                            <?php
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat(round($close_estimate->fda * $default_currency->currency_value, 2));
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($close_estimate->fda);
+                                            }
+                                            ?>
+                                        </td>
+                                        <td style="width: 11%;text-align:right;">
+                                            <?php
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat(round($close_estimate->tax_amount * $default_currency->currency_value, 2));
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($close_estimate->tax_amount);
+                                            }
+                                            ?>
+                                        </td>
                                         <?php
                                         $grandtotal += $close_estimate->fda;
                                         if ($close_estimate->tax_amount != '') {
@@ -468,14 +536,36 @@ and open the template in the editor.
                             }
                             ?>
                             <tr>
-                                <td style="width: 10%;" rowspan="2"></td>
-                                <td  colspan="2" rowspan="2" style="width: 55%;text-align:right;font-weight: bold;">Total</td>
-                                <td style="width: 15%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round($grand_tax_total, 2)); ?></td>
-                                <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 15%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round($grand_tax_total, 2)); ?></span></td>
-                                <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round($grandtotal, 2)); ?></span></td>
+                                <td style="width: 6%;" rowspan="2"></td>
+                                <td  colspan="2" style="width: 45%;text-align:right;font-weight: bold;font-size: 12px;">Total</td>
+                                <td style="width: 12%;font-weight: bold;text-align:right;">
+                                    <?php if ($appointment->currency == 1) { ?>
+                                        <?= 'USD : ' . Yii::$app->SetValues->NumberFormat(round($grandtotal * $default_currency->currency_value), 2); ?>
+                                    <?php } else {
+                                        ?>
+                                        <?= 'AED : ' . Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?>
+                                    <?php }
+                                    ?>
+                                </td>
+                                <td style="width: 11%;font-weight: bold;text-align:right;"></td>
+                                <td style="width: 15%;font-weight: bold;text-align:right;">
+                                    <?php if ($appointment->currency == 1) { ?>
+                                        <?= 'USD : ' . Yii::$app->SetValues->NumberFormat(round($grandtotal * $default_currency->currency_value), 2); ?>
+                                    <?php } else {
+                                        ?>
+                                        <?= 'AED : ' . Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?>
+                                    <?php }
+                                    ?>
+                                </td>
+                                <td style="width: 11%;font-weight: bold;text-align:right;">
+                                    <?php if ($appointment->currency == 1) { ?>
+                                        <?= 'USD : ' . Yii::$app->SetValues->NumberFormat(round($grand_tax_total * $default_currency->currency_value), 2); ?>
+                                    <?php } else {
+                                        ?>
+                                        <?= 'AED : ' . Yii::$app->SetValues->NumberFormat(round($grand_tax_total, 2)); ?>
+                                    <?php }
+                                    ?>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -523,37 +613,23 @@ and open the template in the editor.
 
                         <table border ="0"  class="table tbl">
                             <tr>
-                                <th style="width: 80%;">Description </th>
-                                <th style="width: 20%;">Amount</th>
+                                <th style="width: 89%;">Description</th>
+                                <th style="width: 11%;">Amount</th>
                             </tr>
                             <tr>
                                 <?php
                                 if ($flag == 1) {
                                     ?>
-                                    <td rowspan="2" style="width: 80%;text-align:left;font-size:11px;"><?php if ($check_total != 0) { ?>Net Received on <?= $date ?> <?php if ($check_no != '') { ?>against cheque no: <b><?= $check_no ?><?php
+                                    <td style="width: 89%;text-align:left;font-size:11px;"><?php if ($check_total != 0) { ?>Net Received on <?= $date ?> <?php if ($check_no != '') { ?>against cheque no: <b><?= $check_no ?><?php
                                                 }
                                             } else {
                                                 ?>NIL PREFUNDING RECEIVED <?php } ?></b></td>
-                                    <td style="width: 20%;font-size: 11px;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round(abs($check_total), 2)); ?></td>
+                                    <td style="width: 11%;font-size: 11px;text-align:right;"><?= Yii::$app->SetValues->NumberFormat(round(abs($check_total), 2)); ?></td>
                                     <?php
                                 } else {
                                     ?>
-                                    <td rowspan="2" style="width: 80%;text-align:left;font-size: 11px;"><?php if ($cash_total != 0) { ?>Net Received on <?= $date ?><?php } else { ?>NIL PREFUNDING RECEIVED<?php } ?></td>
-                                    <td style="width: 20%;font-size: 11px;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round(abs($cash_total), 2)); ?></td>
-                                    <?php
-                                }
-                                ?>
-
-                            </tr>
-                            <tr>
-                                <?php
-                                if ($flag == 1) {
-                                    ?>
-                                    <td style="width: 20%;font-size: 11px;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round(abs($check_total), 2)); ?></span></td>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <td style="width: 20%;font-size: 11px;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round(abs($cash_total), 2)); ?></span></td>
+                                    <td style="width: 89%;text-align:left;font-size: 11px;"><?php if ($cash_total != 0) { ?>Net Received on <?= $date ?><?php } else { ?>NIL PREFUNDING RECEIVED<?php } ?></td>
+                                    <td style="width: 11%;font-size: 11px;text-align:right;"> <?= Yii::$app->SetValues->NumberFormat(round(abs($cash_total), 2)); ?></td>
                                     <?php
                                 }
                                 ?>
@@ -575,26 +651,12 @@ and open the template in the editor.
                                 if ($totaloutstanding < 0) {
                                     ?>
                                     <td rowspan="4" style="width: 80%;text-align:right;">Total Due in our favour </td>
-                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
+                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong><?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
                                     <?php
                                 } else {
                                     ?>
                                     <td rowspan="4" style="width: 80%;text-align:right;">Total Due in Your favour </td>
-                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
-                                    <?php
-                                }
-                                ?>
-
-                            </tr>
-                            <tr>
-                                <?php
-                                if ($totaloutstanding < 0) {
-                                    ?>
-                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round(abs($totaloutstanding), 2)); ?></span></td>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic(round(abs($totaloutstanding), 2)); ?></span></td>
+                                    <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">AED  :</strong><?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
                                     <?php
                                 }
                                 ?>
@@ -606,9 +668,6 @@ and open the template in the editor.
                             ?>
                             <tr>
                                 <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">USD  :</strong> <?= Yii::$app->SetValues->NumberFormat($usd); ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;font-weight: bold;text-align:right;"><strong style="float: left;">USD  :</strong> <span style="font-size: 12px;"><?= Yii::$app->SetValues->NumberArabic($usd); ?></span></td>
                             </tr>
                         </table>
                     </div>
@@ -716,13 +775,13 @@ and open the template in the editor.
                                     <td>
                                         <?php
                                         if ($appointment->vessel_type == 1) {
-                                            echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                            echo 'T - ' . $appointment->tug != '' ? Vessel::findOne($appointment->tug)->vessel_name : '' . ' / B - ' . $appointment->barge != '' ? Vessel::findOne($appointment->barge)->vessel_name : '';
                                         } elseif ($appointment->vessel_type == 2) {
-                                            echo 'M/V - ' . Vessel::findOne($appointment->vessel)->vessel_name;
+                                            echo $appointment->vessel != '' ? 'M/V - ' . Vessel::findOne($appointment->vessel)->vessel_name : '';
                                         } elseif ($appointment->vessel_type == 3) {
-                                            echo 'M/T - ' . Vessel::findOne($appointment->vessel)->vessel_name;
+                                            echo $appointment->vessel != '' ? 'M/T - ' . Vessel::findOne($appointment->vessel)->vessel_name : '';
                                         } else {
-                                            echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                            echo $appointment->vessel != '' ? Vessel::findOne($appointment->vessel)->vessel_name : '';
                                         }
                                         ?>
                                     </td>
@@ -790,7 +849,7 @@ and open the template in the editor.
         <?php
         if ($save) {
             ?>
-            <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-all-report?appintment_id=<?= $appointment->id ?>&&principal_id=<?= $principp ?>&&est_id=<?= $est_id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+            <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-all-report?appintment_id=<?= $appointment->id ?>&&principal_id=<?= $principp ?>&&est_id=<?= $est_id ?>&&invoice_num=<?= $invoice_num ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
             <?php
         }
         ?>

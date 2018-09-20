@@ -455,7 +455,7 @@ and open the template in the editor.
                                 <th style="width: 10%;font-size: 10px;">Sl No.</th>
                                 <th style="width: 40%;font-size: 10px;text-align: left;">Particulars</th>
                                 <th style="width: 13%;font-size: 10px;text-align: right;">Amount</th>
-                                <th style="width: 11%;font-size: 10px;text-align: right;">Wat %</th>
+                                <th style="width: 11%;font-size: 10px;text-align: right;">VAT %</th>
                                 <th style="width: 15%;font-size: 10px;text-align: right;">Taxable Amount</th>
                                 <th style="width: 11%;font-size: 10px;text-align: right;">Tax</th>
                             </tr>

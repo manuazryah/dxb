@@ -179,8 +179,24 @@ class CloseEstimateController extends Controller {
      */
 
     public function actionInsertCloseEstimate($id) {
+        $appointment = Appointment::findOne($id);
         $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
+        if ($appointment->vessel_type != 1) {
+            $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel =:vessel', ['id' => $id, 'principal' => $appointment->principal, 'vessel' => $appointment->vessel])->orderBy(['id' => SORT_DESC])->all();
+        } else {
+            $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and tug =:tug and barge =:barge', ['id' => $id, 'principal' => $appointment->principal, 'tug' => $appointment->tug, 'barge' => $appointment->barge])->orderBy(['id' => SORT_DESC])->all();
+        }
+        if (empty($appntment)) {
+            $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel_type =:vessel_type', ['id' => $id, 'principal' => $appointment->principal, 'vessel_type' => $appointment->vessel_type])->orderBy(['id' => SORT_DESC])->all();
+        }
+        $app_data = [];
+        if (!empty($appntment)) {
+            foreach ($appntment as $appntment_val) {
+                $app_data = $appntment_val->id;
+            }
+        }
         foreach ($estimates as $estimate) {
+            $prev_close_estimate = CloseEstimate::find()->where(['apponitment_id' => $app_data])->andWhere(['service_id' => $estimate->service_id])->orderBy(['id' => SORT_DESC])->one();
             $model = new CloseEstimate;
             $model->apponitment_id = $id;
             $model->service_id = $estimate->service_id;
@@ -196,7 +212,11 @@ class CloseEstimateController extends Controller {
             $model->status = $estimate->status;
             $model->CB = Yii::$app->user->identity->id;
             $model->UB = Yii::$app->user->identity->id;
-            $model->fda = $estimate->epda;
+            if (empty($prev_close_estimate)) {
+                $model->fda = $estimate->epda;
+            } else {
+                $model->fda = $prev_close_estimate->fda;
+            }
             $model->DOC = date('Y-m-d');
             $model->save();
             //echo $model->id;exit;
@@ -369,6 +389,7 @@ class CloseEstimateController extends Controller {
         $invoice_num = $_POST['invoice_num'];
         $app = $_POST['app_id'];
         $principp = $_POST['fda'];
+        $fda_type = $_POST['fda_type'];
         $invoice_date = Yii::$app->ChangeDateFormate->SingleDateFormat($_POST['invoice_date']);
         $appointment = Appointment::findOne($app);
         $ports = PortCallData::findOne(['appointment_id' => $app]);
@@ -382,6 +403,7 @@ class CloseEstimateController extends Controller {
             'principp' => $principp,
             'invoice_date' => $invoice_date,
             'invoice_num' => $invoice_num,
+            'fda_type' => $fda_type,
             'save' => true,
             'print' => false,
         ]);
@@ -393,6 +415,7 @@ class CloseEstimateController extends Controller {
                     'principp' => $principp,
                     'invoice_date' => $invoice_date,
                     'invoice_num' => $invoice_num,
+                    'fda_type' => $fda_type,
                     'save' => false,
                     'print' => true,
         ]));

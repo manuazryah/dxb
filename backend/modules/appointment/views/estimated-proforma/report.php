@@ -158,6 +158,7 @@ $currency = Currency::findOne(1);
         }
         .tbl{
             border-collapse: collapse;
+            width: 100%;
         }
         .tbl td{
             border: 1px solid #848484;
@@ -264,7 +265,15 @@ $currency = Currency::findOne(1);
                     </div>
                     <br/>
                     <div style="clear:both"></div>
-                    <div class="heading" style="margin-bottom: 8px;">ESTIMATED DISBURSEMENT ACCOUNT</div>
+                    <div class="heading" style="margin-bottom: 8px;">
+                        <?php
+                        if ($epda_type == 1) {
+                            echo 'ESTIMATED DISBURSEMENT ACCOUNT';
+                        } elseif ($epda_type == 2) {
+                            echo 'Departure DA';
+                        }
+                        ?>
+                    </div>
                     <div class="topcontent">
                         <div class="topcontent-left">
                             <table class="">
@@ -337,153 +346,66 @@ $currency = Currency::findOne(1);
                     </div>
                     <div class="content-header">
                         <table class="tbl">
-                            <tr>
-                                <td colspan="2" style="width: 52%; font-weight: bold;">Service Category</td>
-                                <td rowspan="2" style="width: 8%;">Unit Tons/No</td>
-                                <td rowspan="2" style="width: 12%;"><b>Comments</b></td>
-                                <td rowspan="2" style="width: 8%;">Unit Price</td>
-                                <td rowspan="2" style="width: 10%;">Tax</td>
-                                <td rowspan="2" style="width: 10%;">Amount</td>
-                            </tr>
-                            <tr>
-                                <td style="width: 26%;">&nbsp;</td>
-                                <td style="width: 26%;color: red;">Comments/Rate to category</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="content-body">
-                        <?php
-                        $grandtotal = 0;
-                        $grand_taxtotal = 0;
-                        $tax_grandtotal = 0;
-                        $service_categories = ServiceCategorys::find()->orderBy(['(sort_order)' => SORT_ASC])->all();
-                        foreach ($service_categories as $service_category) {
-                            $subtotal = 0;
-                            $tax_sub_total = 0;
-                            $estimates = EstimatedProforma::findAll(['apponitment_id' => $appointment->id, 'principal' => $princip, 'service_category' => $service_category->id]);
-                            if (!empty($estimates)) {
-                                ?>
-                                <h6><?= $service_category->category_name ?></h6>
-                                <table class="tbl" style="width:100%;">
-                                    <?php
-                                    foreach ($estimates as $estimate) {
-                                        $subcategories = SubServices::findAll(['estid' => $estimate->id]);
-                                        ?>
-                                        <?php
-                                        if (!empty($subcategories)) {
-                                            ?>
-
-                                            <?php
-                                            foreach ($subcategories as $subcategory) {
-                                                ?>
-                                                <tr>
-                                                    <td style="width: 26%;text-align: left;"><?= $subcategory->sub->sub_service ?></td>
-                                                    <td style="width: 26%;text-align: left;"><?= $subcategory->rate_to_category ?></td>
-                                                    <td style="width: 8%;"><?= $subcategory->unit ?></td>
-                                                    <td style="width: 12%;text-align: left;"><?= $subcategory->comments ?></td>
-                                                    <td style="width: 8%;text-align: right;">
-                                                        <?php
-                                                        if ($appointment->currency == 1) {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->unit_price);
-                                                        } else {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->unit_price);
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td style="width: 10%;text-align: right;">
-                                                        <?php
-                                                        if ($appointment->currency == 1) {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->tax_amount);
-                                                        } else {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->tax_amount);
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td style="width: 10%;font-weight: bold;text-align: right;">
-                                                        <?php
-                                                        if ($appointment->currency == 1) {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->total);
-                                                        } else {
-                                                            echo Yii::$app->SetValues->NumberFormat($subcategory->total);
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <?php
-                                                    $subtotal += $subcategory->total;
-                                                    if ($subcategory->tax_amount != '') {
-                                                        $tax_sub_total += $subcategory->tax_amount;
-                                                    }
-                                                    ?>
-                                                </tr>
-                                                <?php
-                                            }
-                                        } else {
-                                            ?>
-
-                                            <tr>
-                                                <td style="width: 26%;text-align: left;"><?= $estimate->service->service ?></td>
-                                                <td style="width: 26%;text-align: left;"><?= $estimate->rate_to_category ?></td>
-                                                <td style="width: 8%;"><?= $estimate->unit ?></td>
-                                                <td style="width: 12%;text-align: left;"><?= $estimate->comments ?></td>
-                                                <td style="width: 8%;text-align: right;">
-                                                    <?php
-                                                    if ($appointment->currency == 1) {
-
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
-                                                    } else {
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td style="width: 10%;text-align: right;">
-                                                    <?php
-                                                    if ($appointment->currency == 1) {
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
-                                                    } else {
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td style="width: 10%;font-weight: bold;text-align: right;">
-                                                    <?php
-                                                    if ($appointment->currency == 1) {
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->epda);
-                                                    } else {
-                                                        echo Yii::$app->SetValues->NumberFormat($estimate->epda);
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <?php
-                                                $subtotal += $estimate->epda;
-                                                if ($estimate->tax_amount != '') {
-                                                    $tax_sub_total += $estimate->tax_amount;
-                                                }
-                                                ?>
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
+                            <thead>
+                                <tr>
+                                    <td colspan="2" style="width: 52%; font-weight: bold;">Service Category</td>
+                                    <td rowspan="2" style="width: 8%;">Unit Tons/No</td>
+                                    <td rowspan="2" style="width: 12%;"><b>Comments</b></td>
+                                    <td rowspan="2" style="width: 8%;">Unit Price</td>
+                                    <td rowspan="2" style="width: 10%;">Tax</td>
+                                    <td rowspan="2" style="width: 10%;">Amount</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 26%;">&nbsp;</td>
+                                    <td style="width: 26%;color: red;">Comments/Rate to category</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $grandtotal = 0;
+                                $grand_taxtotal = 0;
+                                foreach ($estimates as $estimate) {
                                     ?>
                                     <tr>
-                                        <td colspan="5" rowspan="2" style="text-align: center;font-weight: bold;">Sub total:</td>
-                                        <td style="width: 10%;font-weight: bold;text-align: right;">
+                                        <td><?= $estimate->service->service ?></td>
+                                        <td><?= $estimate->rate_to_category ?></td>
+                                        <td><?= $estimate->unit ?></td>
+                                        <td><?= $estimate->comments ?></td>
+                                        <td>
                                             <?php
-                                            echo Yii::$app->SetValues->NumberFormat($tax_sub_total);
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
+                                            }
                                             ?>
                                         </td>
-                                        <td style="font-weight: bold;text-align: right;">
+                                        <td>
                                             <?php
-                                            echo Yii::$app->SetValues->NumberFormat($subtotal);
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->tax_amount);
+                                            }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            if ($appointment->currency == 1) {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->epda);
+                                            } else {
+                                                echo Yii::$app->SetValues->NumberFormat($estimate->epda);
+                                            }
                                             ?>
                                         </td>
                                     </tr>
-                                </table>
-                                <?php
-                            }
-                            $grandtotal += $subtotal;
-                            $grand_taxtotal += $tax_sub_total;
-                        }
-                        ?>
+                                    <?php
+                                    $grandtotal += $estimate->epda;
+                                    $grand_taxtotal += $estimate->tax_amount;
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                     <br/>
                     <div class="grandtotal">
@@ -526,7 +448,6 @@ $currency = Currency::findOne(1);
                     <br/>
                     <br/>
                     <br/>
-
                 </td>
             </tr>
             <tr>

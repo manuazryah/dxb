@@ -21,7 +21,7 @@ class AppointmentSearch extends Appointment {
 
     public function rules() {
         return [
-            [['id', 'vessel_type', 'vessel', 'port_of_call', 'terminal', 'nominator', 'charterer', 'shipper', 'sub_stages', 'stage', 'status', 'CB', 'UB', 'estimate_status','closeestimate_status'], 'integer'],
+            [['id', 'vessel_type', 'vessel', 'port_of_call', 'terminal', 'nominator', 'charterer', 'shipper', 'sub_stages', 'stage', 'status', 'CB', 'UB', 'estimate_status', 'closeestimate_status'], 'integer'],
             [['birth_no', 'appointment_no', 'no_of_principal', 'purpose', 'arrival_date', 'cast_off', 'cargo', 'quantity', 'last_port', 'next_port', 'eta', 'DOC', 'DOU', 'principal'], 'safe'],
         ];
     }
@@ -44,9 +44,9 @@ class AppointmentSearch extends Appointment {
     public function search($params) {
         if (isset($params["AppointmentSearch"]["principal"]) && $params["AppointmentSearch"]["principal"] != '') {
             $params["AppointmentSearch"]["principal"] = $params["AppointmentSearch"]["principal"];
-            $query = Appointment::find()->where(new Expression('FIND_IN_SET(:principal, principal)'))->addParams([':principal' => $params["AppointmentSearch"]["principal"]])->orderBy(['id' => SORT_DESC]);
+            $query = Appointment::find()->where(new Expression('FIND_IN_SET(:principal, principal)'))->addParams([':principal' => $params["AppointmentSearch"]["principal"]])->orderBy(['stage' => SORT_ASC]);
         } else {
-            $query = Appointment::find()->orderBy(['id' => SORT_DESC]);
+            $query = Appointment::find()->orderBy(['stage' => SORT_ASC]);
         }
         // add conditions that should always apply here
 
